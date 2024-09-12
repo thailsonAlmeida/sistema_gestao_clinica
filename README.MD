@@ -1,4 +1,5 @@
 # Sistema de gestão para clínica
+Um sistema para gerenciar cadastros de pacientes, agendamentos, e relatórios de evolução de tratamentos:
 
 ## Funcionalidades Principais
 ### Gestão de Pacientes

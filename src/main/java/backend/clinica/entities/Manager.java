@@ -1,20 +1,39 @@
 package backend.clinica.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Manager {
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	private String name;
 	private String email;
 	private String contact;
-	private String permission;
+	private boolean permission;
 	
 	public Manager() {}
 
-	public Manager(String name, String email, String contact, String permission) {
+	public Manager(Long id, String name, String email, String contact, boolean permission) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.contact = contact;
 		this.permission = permission;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -41,11 +60,11 @@ public class Manager {
 		this.contact = contact;
 	}
 
-	public String getPermission() {
+	public boolean getPermission() {
 		return permission;
 	}
 
-	public void setPermission(String permission) {
+	public void setPermission(boolean permission) {
 		this.permission = permission;
 	}
 	

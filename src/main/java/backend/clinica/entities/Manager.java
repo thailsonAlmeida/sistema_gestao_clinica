@@ -1,12 +1,17 @@
 package backend.clinica.entities;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-public class Manager {
+@Table(name = "tb_manager")
+public class Manager implements Serializable{
+	private static final long serialVersionUID = 1L;	
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +32,7 @@ public class Manager {
 		this.contact = contact;
 		this.permission = permission;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -60,12 +65,12 @@ public class Manager {
 		this.contact = contact;
 	}
 
-	public boolean getPermission() {
+	public boolean isPermission() {
 		return permission;
 	}
 
 	public void setPermission(boolean permission) {
 		this.permission = permission;
 	}
-	
+
 }

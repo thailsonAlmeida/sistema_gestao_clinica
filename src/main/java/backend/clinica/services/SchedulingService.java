@@ -1,5 +1,7 @@
 package backend.clinica.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +14,12 @@ public class SchedulingService {
 	@Autowired
 	SchedulingRepository schedulingRepository;
 	
-	public Scheduling schedulingDataHour(Scheduling dataHour) {		
-		return schedulingRepository.save(dataHour);
+	public List<Scheduling> findAllManagers() {
+		return schedulingRepository.findAll();
+	}
+	
+	public Scheduling registryScheduling(Scheduling registry) {		
+		return schedulingRepository.save(registry);
 	}
 	
 	public void deleteScheduling(Long id) {

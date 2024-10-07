@@ -71,6 +71,14 @@ public class Professional implements Serializable{
 	}
 	public void setContact(String contact) {
 		this.contact = contact;
+	}	
+
+	public List<Scheduling> getSchedulings() {
+		return schedulings;
+	}
+
+	public void setSchedulings(List<Scheduling> schedulings) {
+		this.schedulings = schedulings;
 	}
 
 	@Override

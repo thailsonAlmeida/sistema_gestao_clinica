@@ -55,6 +55,22 @@ public class Scheduling implements Serializable{
 
 	public void setDateHour(LocalDateTime dateHour) {
 		this.dateHour = dateHour;
+	}	
+
+	public Professional getProfessional() {
+		return professional;
+	}
+
+	public void setProfessional(Professional professional) {
+		this.professional = professional;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
 	@Override

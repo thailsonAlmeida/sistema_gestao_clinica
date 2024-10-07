@@ -65,6 +65,22 @@ public class Report implements Serializable{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}	
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+	public Professional getProfessional() {
+		return professional;
+	}
+
+	public void setProfessional(Professional professional) {
+		this.professional = professional;
 	}
 
 	@Override

@@ -22,7 +22,9 @@ public class ProfessionalService {
 		return professionalRepository.save(registry);
 	}
 	
-	public void deleteProfessional(Long id) {}
+	public void deleteProfessional(Long id) {
+		professionalRepository.deleteById(id);
+	}
 	
 	
 }

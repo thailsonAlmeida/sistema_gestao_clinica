@@ -31,7 +31,7 @@ public class ReportController {
 		return reportService.registryReport(registry);
 	}	 
 	
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public void deleteReport(@PathVariable Long id) {
 		reportService.deleteReport(id);
 	}

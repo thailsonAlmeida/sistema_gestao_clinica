@@ -31,7 +31,7 @@ public class PatientController {
 		return patientService.registryPatient(registry);
 	}	 
 	
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public void deletePatient(@PathVariable Long id) {
 		patientService.deletePatient(id);
 	}

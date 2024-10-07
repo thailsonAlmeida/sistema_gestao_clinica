@@ -31,7 +31,7 @@ public class ManagerController {
 		return managerService.registryManager(registry);
 	}	 
 	
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public void deleteManager(@PathVariable Long id) {
 		managerService.deleteManager(id);
 	}

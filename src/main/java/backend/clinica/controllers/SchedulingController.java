@@ -23,7 +23,7 @@ public class SchedulingController {
 	
 	@GetMapping
 	public List<Scheduling> findAllSchedulings(){
-		return null;
+		return schedulingService.findAllScheduling();
 	}	
 	
 	@PostMapping
@@ -31,7 +31,7 @@ public class SchedulingController {
 		return schedulingService.registryScheduling(registry);
 	}	 
 	
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public void deleteScheduling(@PathVariable Long id) {
 		schedulingService.deleteScheduling(id);
 	}

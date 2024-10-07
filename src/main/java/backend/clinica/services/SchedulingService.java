@@ -14,7 +14,7 @@ public class SchedulingService {
 	@Autowired
 	SchedulingRepository schedulingRepository;
 	
-	public List<Scheduling> findAllManagers() {
+	public List<Scheduling> findAllScheduling() {
 		return schedulingRepository.findAll();
 	}
 	

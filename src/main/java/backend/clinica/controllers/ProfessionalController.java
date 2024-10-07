@@ -32,7 +32,7 @@ public class ProfessionalController {
 		return professionalService.registryProfessional(registry);
 	}	 
 	
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public void deleteProfessional(@PathVariable Long id) {
 		professionalService.deleteProfessional(id);
 	}

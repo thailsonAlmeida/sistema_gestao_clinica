@@ -1,6 +1,7 @@
 package backend.clinica.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,7 @@ import backend.clinica.entities.Patient;
 import backend.clinica.services.PatientService;
 
 @RestController
-@RequestMapping("/pacientes")
+@RequestMapping(value = "/pacientes")
 public class PatientController {
 	
 	@Autowired
@@ -25,6 +26,11 @@ public class PatientController {
 	public List<Patient> findAllPatient(){
 		return patientService.findAllPatients();
 	}	
+	
+	@GetMapping(value = "/{id}")
+	public Optional<Patient> findByIdPatient(@PathVariable Long id){
+		return patientService.findByIdPatient(id);
+	}
 	
 	@PostMapping
 	public Patient registryPatient(@RequestBody Patient registry) {

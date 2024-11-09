@@ -1,6 +1,7 @@
 package backend.clinica.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +17,7 @@ import backend.clinica.services.ProfessionalService;
 
 
 @RestController
-@RequestMapping("/profissionais")
+@RequestMapping(value = "/profissionais")
 public class ProfessionalController {
 	
 	@Autowired
@@ -26,6 +27,11 @@ public class ProfessionalController {
 	public List<Professional> findAllProfessional(){
 		return professionalService.findAllProfessional();
 	}	
+	
+	@GetMapping(value = "/{id}")
+	public Optional<Professional> findByIdProfessional(@PathVariable Long id){
+		return professionalService.findByIdProfessional(id);
+	}
 	
 	@PostMapping
 	public Professional registryProfessional(@RequestBody Professional registry) {

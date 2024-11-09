@@ -15,7 +15,7 @@ import backend.clinica.entities.Report;
 import backend.clinica.services.ReportService;
 
 @RestController
-@RequestMapping("relatorios")
+@RequestMapping(value = "/relatorios")
 public class ReportController {
 	
 	@Autowired
@@ -24,15 +24,15 @@ public class ReportController {
 	@GetMapping
 	public List<Report> findAllReports(){
 		return reportService.findAllReports();
-	}	
+	}//listar todos os relatorios
 	
 	@PostMapping
 	public Report registryReport(@RequestBody Report registry) {
 		return reportService.registryReport(registry);
-	}	 
+	}//registrar relatorio para o paciente
 	
 	@DeleteMapping("/{id}")
 	public void deleteReport(@PathVariable Long id) {
 		reportService.deleteReport(id);
-	}
+	}//deletar relatório do paciente
 }

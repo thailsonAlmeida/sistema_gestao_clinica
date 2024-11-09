@@ -3,6 +3,7 @@ package backend.clinica.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,15 +16,16 @@ import backend.clinica.entities.Scheduling;
 import backend.clinica.services.SchedulingService;
 
 @RestController
-@RequestMapping("/agendamentos")
+@RequestMapping(value = "/agendamentos")
 public class SchedulingController {
 	
 	@Autowired
 	private SchedulingService schedulingService;
 	
 	@GetMapping
-	public List<Scheduling> findAllSchedulings(){
-		return schedulingService.findAllScheduling();
+	public ResponseEntity<List<Scheduling>> findAllSchedulings(){
+		List<Scheduling> listScheduling = schedulingService.findAllScheduling();
+		return ResponseEntity.ok().body(listScheduling);
 	}	
 	
 	@PostMapping

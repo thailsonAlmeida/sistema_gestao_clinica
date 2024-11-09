@@ -15,7 +15,7 @@ import backend.clinica.entities.Manager;
 import backend.clinica.services.ManagerService;
 
 @RestController
-@RequestMapping("/gestores")
+@RequestMapping(value = "/gestores")
 public class ManagerController {
 	
 	@Autowired

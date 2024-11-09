@@ -18,7 +18,7 @@ public class ReportService {
 		return reportRepository.findAll();
 	}
 	
-	public Report registryReport(Report registry) {
+	public Report registryReport(Report registry) {		
 		return reportRepository.save(registry);
 	}
 	

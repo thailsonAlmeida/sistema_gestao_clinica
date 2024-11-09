@@ -1,8 +1,7 @@
-INSERT INTO tb_manager (id, contact, name, email, permission) VALUES (100, '15998269848', 'Milena Santos', 'milena@gmail.com', true);
+INSERT INTO TB_PATIENT ( NAME , ADDRESS , BIRTH_DAY , CONTACT ) VALUES ('Sandro Carlos', 'Rua Canada, n365', '13/10/1994', '(15) 99816-1879');
 
-INSERT INTO tb_professional(id, contact, name, specialty) VALUES (100, '1598699878', 'Silvana Maia Assunção', 'Audiologia');
-INSERT INTO tb_professional(id, contact, name, specialty) VALUES (101, '1598706578', 'Catia Freitas Melo', 'Disfagia');
-INSERT INTO tb_professional(id, contact, name, specialty) VALUES (102, '1598805578', 'Diane Silva Almeida', 'Linguagem');
+INSERT INTO TB_PROFESSIONAL ( NAME , SPECIALTY , CONTACT ) VALUES ('Luana Farias Assunção', 'Fonoaudiologia','(15) 98641-7895');
 
-INSERT INTO tb_patient(id, name, address, contact, birth_day) VALUES ('100', 'Carlos Vilela', 'Rua A', '1598632549', '13/10/1994');
-INSERT INTO tb_patient(id, name, address, contact, birth_day) VALUES ('100', 'Julina Faria', 'Rua B', '1598402549', '13/10/1995');
+INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR ) VALUES (1, 1, '2024-11-09T09:14:03.465664400');
+
+INSERT INTO TB_REPORT ( DATE_REPORT , PATIENT_ID , PROFESSIONAL_ID , DESCRIPTION ) VALUES ('2024-11-09T09:16:39.379850600', 1, 1, 'Com aplicação da técnica... foi observado no paciente as seguintes reações...');

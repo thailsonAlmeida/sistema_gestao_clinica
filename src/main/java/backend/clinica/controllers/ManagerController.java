@@ -3,6 +3,7 @@ package backend.clinica.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +23,9 @@ public class ManagerController {
 	private ManagerService managerService;	
 	
 	@GetMapping
-	public List<Manager> findAllManagers(){
-		return managerService.findAllManagers();
+	public ResponseEntity<List<Manager>> findAllManagers(){
+		List<Manager> listManagers = managerService.findAllManagers();
+		return ResponseEntity.ok().body(listManagers);
 	}	
 	
 	@PostMapping

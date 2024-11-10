@@ -33,7 +33,7 @@ public class ProfessionalService {
 	@Transactional(readOnly = true)
 	public ProfessionalDTO findByIdProfessional(Long id){
 		Optional<Professional> prefessionalObj = professionalRepository.findById(id);
-		Professional professionalEntity = prefessionalObj.orElseThrow(() -> new ResourceNotFoundException("Profissional não cadastrado"));
+		Professional professionalEntity = prefessionalObj.orElseThrow(() -> new ResourceNotFoundException("Profissional inexistente"));
 		return new ProfessionalDTO(professionalEntity);
 	}
 	

@@ -1,19 +1,22 @@
 package backend.clinica.controllers;
 
-import java.util.List;
-import java.util.Optional;
+import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import backend.clinica.entities.Patient;
+import backend.clinica.dto.PatientDTO;
 import backend.clinica.services.PatientService;
 
 @RestController
@@ -24,24 +27,38 @@ public class PatientController {
 	private PatientService patientService;
 	
 	@GetMapping
-	public ResponseEntity<List<Patient>> findAllPatient(){
-		List<Patient> listPatients = patientService.findAllPatients();
+	public ResponseEntity<Page<PatientDTO>> findAllPatientPaged(Pageable pageable){
+		Page<PatientDTO> listPatients = patientService.findAllPatientsPaged(pageable);
 		return ResponseEntity.ok().body(listPatients);
 	}	
 	
 	@GetMapping(value = "/{id}")
-	public Optional<Patient> findByIdPatient(@PathVariable Long id){
-		return patientService.findByIdPatient(id);
+	public ResponseEntity<PatientDTO> findByIdPatient(@PathVariable Long id){
+		PatientDTO patientDTO = patientService.findByIdPatient(id);
+		return ResponseEntity.ok().body(patientDTO);
 	}
 	
 	@PostMapping
-	public Patient registryPatient(@RequestBody Patient registry) {
-		return patientService.registryPatient(registry);
-	}	 
+	public ResponseEntity<PatientDTO> registryPatient(@RequestBody PatientDTO patientDTO) {
+		patientDTO = patientService.registryPatient(patientDTO);
+		URI url = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(patientDTO.getId())
+				.toUri();
+		return ResponseEntity.created(url).body(patientDTO);
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id, @RequestBody PatientDTO patientDTO) {
+		patientDTO = patientService.updateRegistryPatient(id, patientDTO);		
+		return ResponseEntity.ok().body(patientDTO);
+	}
 	
 	@DeleteMapping("/{id}")
-	public void deletePatient(@PathVariable Long id) {
+	public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
 		patientService.deletePatient(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }

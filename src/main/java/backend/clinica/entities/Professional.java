@@ -32,7 +32,6 @@ public class Professional implements Serializable{
     public Professional() {}
     
 	public Professional(Long id, String name, String specialty, String contact) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.specialty = specialty;
@@ -40,7 +39,6 @@ public class Professional implements Serializable{
 	}
 	
 	public Professional(Long id, String name, String specialty, String contact, List<Scheduling> schedulings) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.specialty = specialty;

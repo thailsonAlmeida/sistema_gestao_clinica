@@ -33,7 +33,6 @@ public class Patient implements Serializable{
     public Patient() {}   
     
 	public Patient(Long id, String name, String address, String contact, String birthDay) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -42,7 +41,6 @@ public class Patient implements Serializable{
 	}	
 
 	public Patient(Long id, String name, String address, String contact, String birthDay, List<Report> reportHistory) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.address = address;

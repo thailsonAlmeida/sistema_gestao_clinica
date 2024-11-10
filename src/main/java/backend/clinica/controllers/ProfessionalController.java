@@ -1,5 +1,7 @@
 package backend.clinica.controllers;
 
+
+
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,25 +39,25 @@ public class ProfessionalController {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ProfessionalDTO> findByIdProfessional(@PathVariable Long id){
-		ProfessionalDTO dtoProfessional = professionalService.findByIdProfessional(id);
-		return ResponseEntity.ok().body(dtoProfessional);
+		ProfessionalDTO professionalDTO = professionalService.findByIdProfessional(id);
+		return ResponseEntity.ok().body(professionalDTO);
 	}
 	
 	@PostMapping
-	public ResponseEntity<ProfessionalDTO> registryProfessional(@RequestBody ProfessionalDTO dtoProfessional) {
-		dtoProfessional = professionalService.registryProfessional(dtoProfessional);
-		URI uri = ServletUriComponentsBuilder
+	public ResponseEntity<ProfessionalDTO> registryProfessional(@RequestBody ProfessionalDTO professionalDTO) {
+		professionalDTO = professionalService.registryProfessional(professionalDTO);
+		URI url = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
-				.buildAndExpand(dtoProfessional.getId())
+				.buildAndExpand(professionalDTO.getId())
 				.toUri();
-		return ResponseEntity.created(uri).body(dtoProfessional);
+		return ResponseEntity.created(url).body(professionalDTO);
 	} 
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<ProfessionalDTO> updateRegistryProfessional(@PathVariable Long id, @RequestBody ProfessionalDTO dtoProfessional) {
-		dtoProfessional = professionalService.updateRegistryProfessional(id, dtoProfessional);		
-		return ResponseEntity.ok().body(dtoProfessional);
+	public ResponseEntity<ProfessionalDTO> updateRegistryProfessional(@PathVariable Long id, @RequestBody ProfessionalDTO professionalDTO) {
+		professionalDTO = professionalService.updateRegistryProfessional(id, professionalDTO);		
+		return ResponseEntity.ok().body(professionalDTO);
 	} 
 	
 	@DeleteMapping("/{id}")

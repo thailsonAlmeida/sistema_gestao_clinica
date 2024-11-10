@@ -1,16 +1,22 @@
 package backend.clinica.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import backend.clinica.dto.ProfessionalDTO;
 import backend.clinica.entities.Professional;
 import backend.clinica.repositories.ProfessionalRepository;
-import jakarta.transaction.Transactional;
+import backend.clinica.services.exceptions.DataBaseException;
+import backend.clinica.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
+
 
 @Service
 public class ProfessionalService {
@@ -18,23 +24,52 @@ public class ProfessionalService {
 	@Autowired
 	ProfessionalRepository professionalRepository;
 	
+	@Transactional(readOnly = true)
+	public Page<ProfessionalDTO> findAllProfessionalPaged(Pageable pageable) {
+		Page<Professional> listProfessional = professionalRepository.findAll(pageable);		
+		return listProfessional.map(x -> new ProfessionalDTO(x));
+	}
+	
+	@Transactional(readOnly = true)
+	public ProfessionalDTO findByIdProfessional(Long id){
+		Optional<Professional> prefessionalObj = professionalRepository.findById(id);
+		Professional professionalEntity = prefessionalObj.orElseThrow(() -> new ResourceNotFoundException("Profissional não cadastrado"));
+		return new ProfessionalDTO(professionalEntity);
+	}
+	
+	@Transactional(readOnly = true)
+	public ProfessionalDTO registryProfessional(ProfessionalDTO dtoProfessional) {
+		Professional professionalEntity = new Professional();
+		professionalEntity.setName(dtoProfessional.getName());
+		professionalEntity.setSpecialty(dtoProfessional.getSpecialty());
+		professionalEntity.setContact(dtoProfessional.getContact());
+		professionalEntity = professionalRepository.save(professionalEntity);
+		return new ProfessionalDTO(professionalEntity);
+	}	
+
 	@Transactional
-	public List<ProfessionalDTO> findAllProfessional() {
-		List<Professional> listProfessional = professionalRepository.findAll();		
-		return listProfessional.stream().map(x -> new ProfessionalDTO(x)).collect(Collectors.toList());
-	}//listar todos os profissionais
-	
-	public Optional<Professional> findByIdProfessional(Long id){
-		return professionalRepository.findById(id);
-	}//exibir profissional
-	
-	public Professional registryProfessional(Professional registry) {
-		return professionalRepository.save(registry);
-	}//registrar profissional
+	public ProfessionalDTO updateRegistryProfessional(Long id, ProfessionalDTO dtoProfessional) {
+		try {
+			Professional professionalEntity = professionalRepository.getReferenceById(id);
+			professionalEntity.setName(dtoProfessional.getName());
+			professionalEntity.setSpecialty(dtoProfessional.getSpecialty());
+			professionalEntity.setContact(dtoProfessional.getContact());	
+			professionalEntity = professionalRepository.save(professionalEntity);
+			return new ProfessionalDTO(professionalEntity);
+		
+		}catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("ID do profissional inexistente: " + id);
+		}		
+	}
 	
 	public void deleteProfessional(Long id) {
-		professionalRepository.deleteById(id);
-	}//deletar profissional
-	
+		try {
+			professionalRepository.deleteById(id);
+		}catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("ID do profissional inexistente: " + id);
+		}catch (DataIntegrityViolationException e) {
+			throw new DataBaseException("Violação de integridade");
+		}
+	}
 	
 }

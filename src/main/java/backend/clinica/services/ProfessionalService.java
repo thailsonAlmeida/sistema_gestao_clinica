@@ -48,12 +48,12 @@ public class ProfessionalService {
 	}	
 
 	@Transactional
-	public ProfessionalDTO updateRegistryProfessional(Long id, ProfessionalDTO dtoProfessional) {
+	public ProfessionalDTO updateRegistryProfessional(Long id, ProfessionalDTO professionalDTO) {
 		try {
 			Professional professionalEntity = professionalRepository.getReferenceById(id);
-			professionalEntity.setName(dtoProfessional.getName());
-			professionalEntity.setSpecialty(dtoProfessional.getSpecialty());
-			professionalEntity.setContact(dtoProfessional.getContact());	
+			professionalEntity.setName(professionalDTO.getName());
+			professionalEntity.setSpecialty(professionalDTO.getSpecialty());
+			professionalEntity.setContact(professionalDTO.getContact());	
 			professionalEntity = professionalRepository.save(professionalEntity);
 			return new ProfessionalDTO(professionalEntity);
 		

@@ -32,7 +32,7 @@ public class ProfessionalController {
 	private ProfessionalService professionalService;
 		
 	@GetMapping
-	public ResponseEntity<Page<ProfessionalDTO>> findAllProfessional(Pageable pageable){	
+	public ResponseEntity<Page<ProfessionalDTO>> findAllProfessionalPaged(Pageable pageable){	
 		Page<ProfessionalDTO> listProfissionals = professionalService.findAllProfessionalPaged(pageable);
 		return ResponseEntity.ok().body(listProfissionals);
 	}	

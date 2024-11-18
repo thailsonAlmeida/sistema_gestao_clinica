@@ -1,12 +1,17 @@
 package backend.clinica.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import backend.clinica.dto.ReportDTO;
 import backend.clinica.entities.Report;
 import backend.clinica.repositories.ReportRepository;
+import backend.clinica.services.exceptions.DataBaseException;
+import backend.clinica.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ReportService {
@@ -14,16 +19,40 @@ public class ReportService {
 	@Autowired
 	ReportRepository reportRepository;
 	
-	public List<Report> findAllReports() {
-		return reportRepository.findAll();
+	@Transactional(readOnly = true)
+	public ReportDTO registryReport(ReportDTO reportDTO) {
+		Report reportEntity = new Report();
+		reportEntity.setDateReport(reportDTO.getDateReport());
+		reportEntity.setDescription(reportDTO.getDescription());
+		reportEntity.setPatient(reportDTO.getPatient());
+		reportEntity.setProfessional(reportDTO.getProfessional());
+		reportEntity = reportRepository.save(reportEntity);
+		return new ReportDTO(reportEntity);
 	}
 	
-	public Report registryReport(Report registry) {		
-		return reportRepository.save(registry);
+	@Transactional
+	public ReportDTO updateRegistryReport(Long id, ReportDTO reportDTO) {
+		try {
+			Report reportEntity = reportRepository.getReferenceById(id);
+			reportEntity.setDateReport(reportDTO.getDateReport());
+			reportEntity.setDescription(reportDTO.getDescription());
+			reportEntity.setPatient(reportDTO.getPatient());
+			reportEntity.setProfessional(reportDTO.getProfessional());
+			reportEntity = reportRepository.save(reportEntity);
+			return new ReportDTO(reportEntity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("ID do relatório inexistente: " + id);
+		}
 	}
 	
 	public void deleteReport(Long id) {
-		reportRepository.deleteById(id);
+		try {
+			reportRepository.deleteById(id);
+		}catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("ID do relatório inexistente: " + id);
+		}catch (DataIntegrityViolationException e) {
+			throw new DataBaseException("Violação de integridade");
+		}
 	}
 	
 	

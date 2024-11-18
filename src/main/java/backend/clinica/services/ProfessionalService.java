@@ -55,8 +55,7 @@ public class ProfessionalService {
 			professionalEntity.setSpecialty(professionalDTO.getSpecialty());
 			professionalEntity.setContact(professionalDTO.getContact());	
 			professionalEntity = professionalRepository.save(professionalEntity);
-			return new ProfessionalDTO(professionalEntity);
-		
+			return new ProfessionalDTO(professionalEntity);		
 		}catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("ID do profissional inexistente: " + id);
 		}		

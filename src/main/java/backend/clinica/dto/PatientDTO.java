@@ -1,7 +1,9 @@
 package backend.clinica.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import backend.clinica.entities.Patient;
 import backend.clinica.entities.Report;
@@ -16,7 +18,7 @@ public class PatientDTO implements Serializable{
     private String contact;
     private String birthDay;   
     
-    private List<Report> reportHistory;
+    private List<ReportDTO> reportHistory = new ArrayList<ReportDTO>();
     
     public PatientDTO() {}
 
@@ -34,6 +36,11 @@ public class PatientDTO implements Serializable{
 		this.address = patient.getAddress();
 		this.contact = patient.getContact();
 		this.birthDay = patient.getBirthDay();
+    }
+    
+    public PatientDTO(Patient patient, Set<Report> reports) {
+    	this(patient);
+    	reports.forEach(repo -> this.reportHistory.add(new ReportDTO(repo, repo.getProfessional())));
     }
 
 	public Long getId() {
@@ -76,11 +83,11 @@ public class PatientDTO implements Serializable{
 		this.birthDay = birthDay;
 	}
 
-	public List<Report> getReportHistory() {
+	public List<ReportDTO> getReportHistory() {
 		return reportHistory;
 	}
 
-	public void setReportHistory(List<Report> reportHistory) {
+	public void setReportHistory(List<ReportDTO> reportHistory) {
 		this.reportHistory = reportHistory;
 	}
     

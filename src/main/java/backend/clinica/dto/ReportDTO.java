@@ -15,9 +15,9 @@ public class ReportDTO implements Serializable{
     private LocalDateTime dateReport;
     private String description;
     
-    private Patient patient;
+    private PatientDTO patient;
     
-    private Professional professional;
+    private ProfessionalDTO professional;
     
     public ReportDTO() {}
 
@@ -26,16 +26,28 @@ public class ReportDTO implements Serializable{
 		this.id = id;
 		this.dateReport = dateReport;
 		this.description = description;
-		this.patient = patient;
-		this.professional = professional;
 	}
 	
 	public ReportDTO(Report report) {
 		this.id = report.getId();
 		this.dateReport = report.getDateReport();
 		this.description = report.getDescription();
-		this.patient = report.getPatient();
-		this.professional = report.getProfessional();
+	}
+	
+	public ReportDTO(Report report, Professional professional) {
+		this(report);
+		this.professional = new ProfessionalDTO(professional);
+	}
+	
+	public ReportDTO(Report report, Patient patient) {
+		this(report);
+		this.patient = new PatientDTO(patient);
+	}
+	
+	public ReportDTO(Report report, Professional professional, Patient patient) {
+		this(report);
+		this.professional = new ProfessionalDTO(professional);
+		this.patient = new PatientDTO(patient);
 	}
 
 	public Long getId() {
@@ -62,20 +74,20 @@ public class ReportDTO implements Serializable{
 		this.description = description;
 	}
 
-	public Patient getPatient() {
+	public PatientDTO getPatient() {
 		return patient;
 	}
 
-	public void setPatient(Patient patient) {
+	public void setPatient(PatientDTO patient) {
 		this.patient = patient;
 	}
 
-	public Professional getProfessional() {
+	public ProfessionalDTO getProfessional() {
 		return professional;
 	}
 
-	public void setProfessional(Professional professional) {
+	public void setProfessional(ProfessionalDTO professional) {
 		this.professional = professional;
 	}
-    
+	
 }

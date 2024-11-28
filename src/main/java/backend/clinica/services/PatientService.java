@@ -33,7 +33,7 @@ public class PatientService {
 	public PatientDTO findByIdPatient(Long id) {
 		Optional<Patient> patientObj = patientRepository.findById(id);
 		Patient patientEntity = patientObj.orElseThrow(() -> new ResourceNotFoundException("Paciente inexistente"));
-		return new PatientDTO(patientEntity);
+		return new PatientDTO(patientEntity, patientEntity.getReportHistory());
 	}
 	
 	@Transactional(readOnly = true)

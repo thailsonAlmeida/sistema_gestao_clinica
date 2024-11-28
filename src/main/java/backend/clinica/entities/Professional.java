@@ -1,8 +1,9 @@
 package backend.clinica.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -27,7 +28,7 @@ public class Professional implements Serializable{
     private String contact;
     
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Scheduling> schedulings;
+    private Set<Scheduling> schedulings = new HashSet<>();
     
     public Professional() {}
     
@@ -36,14 +37,6 @@ public class Professional implements Serializable{
 		this.name = name;
 		this.specialty = specialty;
 		this.contact = contact;
-	}
-	
-	public Professional(Long id, String name, String specialty, String contact, List<Scheduling> schedulings) {
-		this.id = id;
-		this.name = name;
-		this.specialty = specialty;
-		this.contact = contact;
-		this.schedulings = schedulings;
 	}
 
 	public Long getId() {
@@ -71,12 +64,8 @@ public class Professional implements Serializable{
 		this.contact = contact;
 	}	
 
-	public List<Scheduling> getSchedulings() {
+	public Set<Scheduling> getSchedulings() {
 		return schedulings;
-	}
-
-	public void setSchedulings(List<Scheduling> schedulings) {
-		this.schedulings = schedulings;
 	}
 
 	@Override

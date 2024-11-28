@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +23,8 @@ public class Report implements Serializable{
 	private Long id;
 
     private LocalDateTime dateReport;
+    
+    @Column(columnDefinition = "TEXT")
     private String description;
     
     @ManyToOne
@@ -34,8 +37,13 @@ public class Report implements Serializable{
     
     public Report() {}
     
+	public Report(Long id, LocalDateTime dateReport, String description) {
+		this.id = id;
+		this.dateReport = dateReport;
+		this.description = description;
+	}
+			
 	public Report(Long id, LocalDateTime dateReport, String description, Patient patient, Professional professional) {
-		super();
 		this.id = id;
 		this.dateReport = dateReport;
 		this.description = description;
@@ -71,12 +79,12 @@ public class Report implements Serializable{
 		return patient;
 	}
 
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
-
 	public Professional getProfessional() {
 		return professional;
+	}
+	
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
 	public void setProfessional(Professional professional) {

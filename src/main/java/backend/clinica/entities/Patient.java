@@ -1,8 +1,9 @@
 package backend.clinica.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -27,8 +28,8 @@ public class Patient implements Serializable{
     private String contact;
     private String birthDay;   
     
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Report> reportHistory;
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Report> reportHistory = new HashSet<>();
     
     public Patient() {}   
     
@@ -39,15 +40,6 @@ public class Patient implements Serializable{
 		this.contact = contact;
 		this.birthDay = birthDay;
 	}	
-
-	public Patient(Long id, String name, String address, String contact, String birthDay, List<Report> reportHistory) {
-		this.id = id;
-		this.name = name;
-		this.address = address;
-		this.contact = contact;
-		this.birthDay = birthDay;
-		this.reportHistory = reportHistory;
-	}
 
 	public Long getId() {
 		return id;
@@ -78,15 +70,11 @@ public class Patient implements Serializable{
 	}
 	public void setBirthDay(String birthDay) {
 		this.birthDay = birthDay;
-	}
+	}	
 
-	public List<Report> getReportHistory() {
+	public Set<Report> getReportHistory() {
 		return reportHistory;
-	}
-
-	public void setReportHistory(List<Report> reportHistory) {
-		this.reportHistory = reportHistory;
-	}
+	}	
 
 	@Override
 	public int hashCode() {

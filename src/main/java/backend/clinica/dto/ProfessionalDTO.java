@@ -1,7 +1,8 @@
 package backend.clinica.dto;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import backend.clinica.entities.Professional;
@@ -16,7 +17,7 @@ public class ProfessionalDTO implements Serializable{
     private String specialty;
     private String contact;
     
-    private Set<Scheduling> schedulings = new HashSet<>();
+    private List<SchedulingDTO> schedulings = new ArrayList<>();
     
     
     public ProfessionalDTO() {}
@@ -33,6 +34,11 @@ public class ProfessionalDTO implements Serializable{
 		this.name = professional.getName();
 		this.specialty = professional.getSpecialty();
 		this.contact = professional.getContact();
+	}
+	
+	public ProfessionalDTO(Professional professional,  Set<Scheduling> schedulings) {
+		this(professional);
+		schedulings.forEach(sched -> this.schedulings.add(new SchedulingDTO(sched, sched.getPatient())));
 	}
 
 	public Long getId() {
@@ -67,7 +73,7 @@ public class ProfessionalDTO implements Serializable{
 		this.contact = contact;
 	}
 
-	public Set<Scheduling> getSchedulings() {
+	public List<SchedulingDTO> getSchedulings() {
 		return schedulings;
 	}
 	

@@ -34,7 +34,7 @@ public class ProfessionalService {
 	public ProfessionalDTO findByIdProfessional(Long id){
 		Optional<Professional> prefessionalObj = professionalRepository.findById(id);
 		Professional professionalEntity = prefessionalObj.orElseThrow(() -> new ResourceNotFoundException("Profissional inexistente"));
-		return new ProfessionalDTO(professionalEntity);
+		return new ProfessionalDTO(professionalEntity, professionalEntity.getSchedulings());
 	}
 	
 	@Transactional(readOnly = true)

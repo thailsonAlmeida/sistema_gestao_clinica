@@ -12,23 +12,35 @@ public class SchedulingDTO implements Serializable{
 	
 	private Long id;
 	private LocalDateTime dateHour;
-	private Professional professional;
-	private Patient patient;
+	private ProfessionalDTO professional;
+	private PatientDTO patient;
 	
 	public SchedulingDTO() {}
 
-	public SchedulingDTO(Long id, LocalDateTime dateHour, Professional professional, Patient patient) {
+	public SchedulingDTO(Long id, LocalDateTime dateHour) {
 		this.id = id;
 		this.dateHour = dateHour;
-		this.professional = professional;
-		this.patient = patient;
 	}
 	
 	public SchedulingDTO(Scheduling scheduling) {
 		this.id = scheduling.getId();
 		this.dateHour = scheduling.getDateHour();
-		this.professional = scheduling.getProfessional();
-		this.patient = scheduling.getPatient();
+	}
+	
+	public SchedulingDTO(Scheduling scheduling, Professional professional) {
+		this(scheduling);
+		this.professional = new ProfessionalDTO(professional);
+	}
+	
+	public SchedulingDTO(Scheduling scheduling, Patient patient) {
+		this(scheduling);
+		this.patient = new PatientDTO(patient);
+	}
+	
+	public SchedulingDTO(Scheduling scheduling, Professional professional, Patient patient) {
+		this(scheduling);
+		this.professional = new ProfessionalDTO(professional);
+		this.patient = new PatientDTO(patient);
 	}
 
 	public Long getId() {
@@ -47,19 +59,19 @@ public class SchedulingDTO implements Serializable{
 		this.dateHour = dateHour;
 	}
 
-	public Professional getProfessional() {
+	public ProfessionalDTO getProfessional() {
 		return professional;
 	}
 
-	public void setProfessional(Professional professional) {
+	public void setProfessional(ProfessionalDTO professional) {
 		this.professional = professional;
 	}
 
-	public Patient getPatient() {
+	public PatientDTO getPatient() {
 		return patient;
 	}
 
-	public void setPatient(Patient patient) {
+	public void setPatient(PatientDTO patient) {
 		this.patient = patient;
 	}
 	

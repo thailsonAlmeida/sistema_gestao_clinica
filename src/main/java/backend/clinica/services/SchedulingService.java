@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import backend.clinica.dto.PatientDTO;
+import backend.clinica.dto.ProfessionalDTO;
 import backend.clinica.dto.SchedulingDTO;
 import backend.clinica.entities.Patient;
 import backend.clinica.entities.Professional;
@@ -44,14 +46,14 @@ public class SchedulingService {
 	        schedulingDTO.setDateHour(scheduling.getDateHour());
 	        
 	        schedulingDTO.setProfessional(
-	        		new Professional(
+	        		new ProfessionalDTO(
 	        				scheduling.getProfessional().getId(),
 	        				scheduling.getProfessional().getName(),
 	        				scheduling.getProfessional().getSpecialty(),
 	        				scheduling.getProfessional().getContact()
 	        ));
 	        schedulingDTO.setPatient(
-	        		new Patient(
+	        		new PatientDTO(
 	        				scheduling.getPatient().getId(),
 	        				scheduling.getPatient().getName(),
 	        				scheduling.getPatient().getAddress(),
@@ -67,22 +69,26 @@ public class SchedulingService {
 	@Transactional(readOnly = true)
 	public SchedulingDTO registryScheduling(SchedulingDTO schedulingDTO) {
 		Scheduling schedulingEntity = new Scheduling();
+		Patient patientEntity = new Patient();		
+		Professional professionalEntity = new Professional();
+		
+		patientEntity.setId(schedulingDTO.getPatient().getId());
+		professionalEntity.setId(schedulingDTO.getProfessional().getId());
+		
 		schedulingEntity.setDateHour(schedulingDTO.getDateHour());
-		schedulingEntity.setProfessional(schedulingDTO.getProfessional());
-		schedulingEntity.setPatient(schedulingDTO.getPatient());
+		schedulingEntity.setProfessional(professionalEntity);
+		schedulingEntity.setPatient(patientEntity);
 		schedulingEntity = schedulingRepository.save(schedulingEntity);
 		return new SchedulingDTO(schedulingEntity);
 	}
 	
 	@Transactional
 	public SchedulingDTO updateRegistryScheduling(Long id, SchedulingDTO schedulingDTO) {
-		try {
-		Scheduling schedulingEntity = schedulingRepository.getReferenceById(id);
-		schedulingEntity.setDateHour(schedulingDTO.getDateHour());
-		schedulingEntity.setProfessional(schedulingDTO.getProfessional());
-		schedulingEntity.setPatient(schedulingDTO.getPatient());
-		schedulingEntity = schedulingRepository.save(schedulingEntity);
-		return new SchedulingDTO(schedulingEntity);
+		try {	
+			Scheduling schedulingEntity = schedulingRepository.getReferenceById(id);			
+			schedulingEntity.setDateHour(schedulingDTO.getDateHour());
+			schedulingEntity = schedulingRepository.save(schedulingEntity);
+			return new SchedulingDTO(schedulingEntity);
 		}catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("ID do agendamento inexistente: " + id);
 		}

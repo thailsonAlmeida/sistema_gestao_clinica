@@ -12,19 +12,25 @@ public class SchedulingDTO implements Serializable{
 	
 	private Long id;
 	private LocalDateTime dateHour;
+	boolean isConfirmed; 
+	boolean isPresent;
 	private ProfessionalDTO professional;
 	private PatientDTO patient;
 	
 	public SchedulingDTO() {}
 
-	public SchedulingDTO(Long id, LocalDateTime dateHour) {
+	public SchedulingDTO(Long id, LocalDateTime dateHour, boolean isConfirmed, boolean isPresent) {
 		this.id = id;
 		this.dateHour = dateHour;
+		this.isConfirmed = isConfirmed;
+		this.isPresent = isPresent;
 	}
 	
 	public SchedulingDTO(Scheduling scheduling) {
 		this.id = scheduling.getId();
 		this.dateHour = scheduling.getDateHour();
+		this.isConfirmed = scheduling.isConfirmed();
+		this.isPresent = scheduling.isPresent();
 	}
 	
 	public SchedulingDTO(Scheduling scheduling, Professional professional) {
@@ -57,6 +63,22 @@ public class SchedulingDTO implements Serializable{
 
 	public void setDateHour(LocalDateTime dateHour) {
 		this.dateHour = dateHour;
+	}	
+
+	public boolean isConfirmed() {
+		return isConfirmed;
+	}
+
+	public void setConfirmed(boolean isConfirmed) {
+		this.isConfirmed = isConfirmed;
+	}
+
+	public boolean isPresent() {
+		return isPresent;
+	}
+
+	public void setPresent(boolean isPresent) {
+		this.isPresent = isPresent;
 	}
 
 	public ProfessionalDTO getProfessional() {

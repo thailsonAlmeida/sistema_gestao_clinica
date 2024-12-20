@@ -22,6 +22,8 @@ public class Scheduling implements Serializable{
 	private Long id;
 
     private LocalDateTime dateHour;
+    private boolean isConfirmed;
+    private boolean isPresent;
     
     @ManyToOne
     @JoinColumn(name = "professional_id")
@@ -33,10 +35,18 @@ public class Scheduling implements Serializable{
     
     public Scheduling() {}
     
-	public Scheduling(Long id, LocalDateTime dateHour, Professional professional, Patient patient) {
-		super();
+	public Scheduling(
+			Long id, 
+			LocalDateTime dateHour, 
+			boolean isConfirmed, 
+			boolean isPresent, 
+			Professional professional, 
+			Patient patient) 
+	{
 		this.id = id;
 		this.dateHour = dateHour;
+		this.isConfirmed = isConfirmed;
+		this.isPresent = isPresent;
 		this.professional = professional;
 		this.patient = patient;
 	}
@@ -56,6 +66,22 @@ public class Scheduling implements Serializable{
 	public void setDateHour(LocalDateTime dateHour) {
 		this.dateHour = dateHour;
 	}	
+
+	public boolean isConfirmed() {
+		return isConfirmed;
+	}
+
+	public void setConfirmed(boolean isConfirmed) {
+		this.isConfirmed = isConfirmed;
+	}
+
+	public boolean isPresent() {
+		return isPresent;
+	}
+
+	public void setPresent(boolean isPresent) {
+		this.isPresent = isPresent;
+	}
 
 	public Professional getProfessional() {
 		return professional;

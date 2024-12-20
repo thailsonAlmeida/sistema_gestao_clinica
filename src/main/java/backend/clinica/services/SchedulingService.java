@@ -44,6 +44,8 @@ public class SchedulingService {
 	        
 	        schedulingDTO.setId(scheduling.getId());
 	        schedulingDTO.setDateHour(scheduling.getDateHour());
+	        schedulingDTO.setConfirmed(scheduling.isConfirmed());
+	        schedulingDTO.setPresent(scheduling.isPresent());
 	        
 	        schedulingDTO.setProfessional(
 	        		new ProfessionalDTO(
@@ -74,7 +76,8 @@ public class SchedulingService {
 		
 		patientEntity.setId(schedulingDTO.getPatient().getId());
 		professionalEntity.setId(schedulingDTO.getProfessional().getId());
-		
+		schedulingEntity.setConfirmed(false);
+		schedulingEntity.setPresent(false);
 		schedulingEntity.setDateHour(schedulingDTO.getDateHour());
 		schedulingEntity.setProfessional(professionalEntity);
 		schedulingEntity.setPatient(patientEntity);
@@ -87,6 +90,8 @@ public class SchedulingService {
 		try {	
 			Scheduling schedulingEntity = schedulingRepository.getReferenceById(id);			
 			schedulingEntity.setDateHour(schedulingDTO.getDateHour());
+			schedulingEntity.setConfirmed(schedulingDTO.isConfirmed());
+			schedulingEntity.setPresent(schedulingDTO.isPresent());
 			schedulingEntity = schedulingRepository.save(schedulingEntity);
 			return new SchedulingDTO(schedulingEntity);
 		}catch (EntityNotFoundException e) {

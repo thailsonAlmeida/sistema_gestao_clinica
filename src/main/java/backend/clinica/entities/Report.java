@@ -23,6 +23,7 @@ public class Report implements Serializable{
 	private Long id;
 
     private LocalDateTime dateReport;
+    private String reportType;
     
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -37,15 +38,17 @@ public class Report implements Serializable{
     
     public Report() {}
     
-	public Report(Long id, LocalDateTime dateReport, String description) {
+	public Report(Long id, LocalDateTime dateReport, String reportType, String description) {
 		this.id = id;
 		this.dateReport = dateReport;
+		this.reportType = reportType;
 		this.description = description;
 	}
 			
-	public Report(Long id, LocalDateTime dateReport, String description, Patient patient, Professional professional) {
+	public Report(Long id, LocalDateTime dateReport, String reportType, String description, Patient patient, Professional professional) {
 		this.id = id;
 		this.dateReport = dateReport;
+		this.reportType = reportType;
 		this.description = description;
 		this.patient = patient;
 		this.professional = professional;
@@ -89,6 +92,14 @@ public class Report implements Serializable{
 
 	public void setProfessional(Professional professional) {
 		this.professional = professional;
+	}	
+	
+	public String getReportType() {
+		return reportType;
+	}
+
+	public void setReportType(String reportType) {
+		this.reportType = reportType;
 	}
 
 	@Override

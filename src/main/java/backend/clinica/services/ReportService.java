@@ -31,6 +31,7 @@ public class ReportService {
 		professionalEntity.setId(reportDTO.getProfessional().getId());
 		
 		reportEntity.setDateReport(reportDTO.getDateReport());
+		reportEntity.setReportType(reportDTO.getReportType());
 		reportEntity.setDescription(reportDTO.getDescription());
 		reportEntity.setPatient(patientEntity);
 		reportEntity.setProfessional(professionalEntity);
@@ -43,6 +44,7 @@ public class ReportService {
 		try {
 			Report reportEntity = reportRepository.getReferenceById(id);
 			reportEntity.setDateReport(reportDTO.getDateReport());
+			reportEntity.setReportType(reportDTO.getReportType());
 			reportEntity.setDescription(reportDTO.getDescription());
 			reportEntity = reportRepository.save(reportEntity);
 			return new ReportDTO(reportEntity);

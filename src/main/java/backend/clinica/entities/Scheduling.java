@@ -24,6 +24,7 @@ public class Scheduling implements Serializable{
     private LocalDateTime dateHour;
     private boolean isConfirmed;
     private boolean isPresent;
+    private boolean isCancel;
     
     @ManyToOne
     @JoinColumn(name = "professional_id")
@@ -40,6 +41,7 @@ public class Scheduling implements Serializable{
 			LocalDateTime dateHour, 
 			boolean isConfirmed, 
 			boolean isPresent, 
+			boolean isCancel,
 			Professional professional, 
 			Patient patient) 
 	{
@@ -114,6 +116,14 @@ public class Scheduling implements Serializable{
 			return false;
 		Scheduling other = (Scheduling) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public boolean isCancel() {
+		return isCancel;
+	}
+
+	public void setCancel(boolean isCancel) {
+		this.isCancel = isCancel;
 	}
     
 }

@@ -9,6 +9,7 @@ INSERT INTO TB_PATIENT ( NAME , ADDRESS , BIRTH_DAY , CONTACT ) VALUES ('Freitas
 INSERT INTO TB_PATIENT ( NAME , ADDRESS , BIRTH_DAY , CONTACT ) VALUES ('Alex Azevedo', 'Rua EUA, n265', '19/12/1994', '(15) 99456-9859');
 INSERT INTO TB_PATIENT ( NAME , ADDRESS , BIRTH_DAY , CONTACT ) VALUES ('Silva Almeida', 'Rua Canada, n51', '20/11/1994', '(15) 99485-0203');
 INSERT INTO TB_PATIENT ( NAME , ADDRESS , BIRTH_DAY , CONTACT ) VALUES ('Julio Castro', 'Rua Azerbaijão, n165', '21/10/1994', '(15) 99498-2521');
+INSERT INTO TB_PATIENT ( NAME , ADDRESS , BIRTH_DAY , CONTACT ) VALUES ('Mirela Leitão Castro', 'Rua Felipinas, n165', '21/10/1994', '(15) 98393-2621');
 
 INSERT INTO TB_PROFESSIONAL ( NAME , SPECIALTY , CONTACT ) VALUES ('Luana Silva Assunção', 'Audiologia','(15) 98965-7895');
 INSERT INTO TB_PROFESSIONAL ( NAME , SPECIALTY , CONTACT ) VALUES ('Clara Almeida Teles', 'Linguagem','(15) 94758-4656');
@@ -16,13 +17,13 @@ INSERT INTO TB_PROFESSIONAL ( NAME , SPECIALTY , CONTACT ) VALUES ('Leticia Fari
 INSERT INTO TB_PROFESSIONAL ( NAME , SPECIALTY , CONTACT ) VALUES ('Leila Fagundes Silva', 'Disfagia','(15) 97856-8745');
 INSERT INTO TB_PROFESSIONAL ( NAME , SPECIALTY , CONTACT ) VALUES ('Laura Pereira Beltrão', 'Fonoaudiologia Escolar','(15) 98974-6584');
 
-INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT ) VALUES (1, 5, '2024-09-10T10:14', true, true);
-INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT ) VALUES (1, 5, '2024-10-10T10:14', false, false);
-INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT ) VALUES (1, 5, '2024-11-10T10:14', true, false);
-INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT ) VALUES (2, 4, '2024-11-11T13:14', false, false);
-INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT ) VALUES (3, 3, '2024-11-13T07:14', true, false);
-INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT ) VALUES (4, 2, '2024-11-14T08:14', false, false);
-INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT ) VALUES (5, 1, '2024-11-15T09:14', true, false);
+INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT , IS_CANCEL ) VALUES (1, 5, '2024-09-10T10:14', true, true, false);
+INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT , IS_CANCEL ) VALUES (1, 5, '2024-10-10T10:14', false, false, true);
+INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT , IS_CANCEL ) VALUES (1, 5, '2024-11-10T10:14', true, false, false);
+INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT , IS_CANCEL ) VALUES (2, 4, '2024-11-11T13:14', false, false, false);
+INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT , IS_CANCEL) VALUES (3, 3, '2024-11-13T07:14', true, false, false);
+INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT , IS_CANCEL) VALUES (4, 2, '2024-11-14T08:14', false, false, false);
+INSERT INTO TB_SCHEDULING ( PROFESSIONAL_ID , PATIENT_ID , DATE_HOUR, IS_CONFIRMED , IS_PRESENT , IS_CANCEL) VALUES (5, 1, '2024-11-15T09:14', true, false, false);
 
 INSERT INTO TB_REPORT ( DATE_REPORT , PATIENT_ID , PROFESSIONAL_ID ,REPORT_TYPE, DESCRIPTION) VALUES ('2024-11-09T09:16', 1, 1,'AVALIATIVO', 'Queixa Principal: Dificuldade em ouvir em ambientes ruidosos e diminuição da audição em altas frequências. Histórico: O paciente relata perda auditiva progressiva há aproximadamente 5 anos, sem causa aparente. Nega o uso de ototóxicos e histórico de otites. Exames Realizados: Audiometria tonal limiar: Perda auditiva neurosensorial moderada, simétrica, com maior comprometimento nas altas frequências. Logoaudiometria: Compreensão da fala adequada para o nível de perda auditiva. Impedanciometria: Curvas tipo A bilateralmente, sugerindo função timpânica normal. Diagnóstico: Perda auditiva neurosensorial bilateral, presbiacústica. Conduta: Orientar o paciente sobre a natureza da perda auditiva e a importância do uso de aparelhos auditivos. Realizar moldagem auricular para confecção de aparelhos auditivos. Acompanhamento periódico para ajuste e verificação da eficácia dos aparelhos. Considerações: O paciente apresenta bom potencial de reabilitação auditiva com o uso de aparelhos auditivos. Recomenda-se o acompanhamento regular com o fonoaudiólogo para otimização da reabilitação.'); 
 INSERT INTO TB_REPORT ( DATE_REPORT , PATIENT_ID , PROFESSIONAL_ID ,REPORT_TYPE, DESCRIPTION) VALUES ('2024-12-09T09:16', 1, 1,'EVOLUTIVO', 'Analise: Melhoria na em ouvir em ambientes ruidosos e diminuição da audição em altas frequências. Histórico: O paciente relata certa recuperação auditiva progressiva. Exames Realizados: Audiometria tonal limiarrecuperação de 25%');

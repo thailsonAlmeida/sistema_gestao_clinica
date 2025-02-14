@@ -46,6 +46,7 @@ public class SchedulingService {
 	        schedulingDTO.setDateHour(scheduling.getDateHour());
 	        schedulingDTO.setConfirmed(scheduling.isConfirmed());
 	        schedulingDTO.setPresent(scheduling.isPresent());
+	        schedulingDTO.setCancel(scheduling.isCancel());
 	        
 	        schedulingDTO.setProfessional(
 	        		new ProfessionalDTO(
@@ -78,6 +79,7 @@ public class SchedulingService {
 		professionalEntity.setId(schedulingDTO.getProfessional().getId());
 		schedulingEntity.setConfirmed(false);
 		schedulingEntity.setPresent(false);
+		schedulingEntity.setCancel(false);
 		schedulingEntity.setDateHour(schedulingDTO.getDateHour());
 		schedulingEntity.setProfessional(professionalEntity);
 		schedulingEntity.setPatient(patientEntity);
@@ -92,7 +94,8 @@ public class SchedulingService {
 			schedulingEntity.setDateHour(schedulingDTO.getDateHour());
 			schedulingEntity.setConfirmed(schedulingDTO.isConfirmed());
 			schedulingEntity.setPresent(schedulingDTO.isPresent());
-			schedulingEntity = schedulingRepository.save(schedulingEntity);
+			schedulingEntity.setCancel(schedulingDTO.isCancel());
+			schedulingEntity = schedulingRepository.save(schedulingEntity);			
 			return new SchedulingDTO(schedulingEntity);
 		}catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("ID do agendamento inexistente: " + id);

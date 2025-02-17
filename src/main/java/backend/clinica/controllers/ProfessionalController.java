@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,8 +33,10 @@ public class ProfessionalController {
 	private ProfessionalService professionalService;
 		
 	@GetMapping
-	public ResponseEntity<Page<ProfessionalDTO>> findAllProfessionalPaged(Pageable pageable){	
-		Page<ProfessionalDTO> listProfissionals = professionalService.findAllProfessionalPaged(pageable);
+	public ResponseEntity<Page<ProfessionalDTO>> findAllProfessionalPaged(
+			@RequestParam(name="name", defaultValue = "") String name,
+			Pageable pageable){	
+		Page<ProfessionalDTO> listProfissionals = professionalService.findAllProfessionalPaged(name, pageable);
 		return ResponseEntity.ok().body(listProfissionals);
 	}	
 	

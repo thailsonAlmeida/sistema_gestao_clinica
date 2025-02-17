@@ -25,8 +25,8 @@ public class ProfessionalService {
 	ProfessionalRepository professionalRepository;
 	
 	@Transactional(readOnly = true)
-	public Page<ProfessionalDTO> findAllProfessionalPaged(Pageable pageable) {
-		Page<Professional> listProfessional = professionalRepository.findAll(pageable);		
+	public Page<ProfessionalDTO> findAllProfessionalPaged(String name, Pageable pageable) {
+		Page<Professional> listProfessional = professionalRepository.searchByName(name, pageable);		
 		return listProfessional.map(x -> new ProfessionalDTO(x));
 	}
 	

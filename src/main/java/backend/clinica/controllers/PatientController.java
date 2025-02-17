@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,8 +28,10 @@ public class PatientController {
 	private PatientService patientService;
 	
 	@GetMapping
-	public ResponseEntity<Page<PatientDTO>> findAllPatientPaged(Pageable pageable){
-		Page<PatientDTO> listPatients = patientService.findAllPatientsPaged(pageable);
+	public ResponseEntity<Page<PatientDTO>> findAllPatientPaged(
+			@RequestParam(name="name", defaultValue = "") String name,
+			Pageable pageable){		
+		Page<PatientDTO> listPatients = patientService.findAllPatientsPaged(name, pageable);
 		return ResponseEntity.ok().body(listPatients);
 	}	
 	

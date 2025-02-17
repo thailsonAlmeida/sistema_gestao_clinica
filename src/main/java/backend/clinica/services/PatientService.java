@@ -24,8 +24,8 @@ public class PatientService {
 	PatientRepository patientRepository;
 	
 	@Transactional(readOnly = true)
-	public Page<PatientDTO> findAllPatientsPaged(Pageable pageable) {
-		Page<Patient> listPatient = patientRepository.findAll(pageable);
+	public Page<PatientDTO> findAllPatientsPaged(String name, Pageable pageable) {
+		Page<Patient> listPatient = patientRepository.searchByName(name, pageable);
 		return listPatient.map(x -> new PatientDTO(x));
 	}
 	

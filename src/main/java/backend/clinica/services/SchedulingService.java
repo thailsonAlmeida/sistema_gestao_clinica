@@ -90,11 +90,19 @@ public class SchedulingService {
 	@Transactional
 	public SchedulingDTO updateRegistryScheduling(Long id, SchedulingDTO schedulingDTO) {
 		try {	
-			Scheduling schedulingEntity = schedulingRepository.getReferenceById(id);			
+			Scheduling schedulingEntity = schedulingRepository.getReferenceById(id);	
+			
+			Patient patientEntity = new Patient();		
+			Professional professionalEntity = new Professional();
+			patientEntity.setId(schedulingDTO.getPatient().getId());
+			professionalEntity.setId(schedulingDTO.getProfessional().getId());
+			
 			schedulingEntity.setDateHour(schedulingDTO.getDateHour());
 			schedulingEntity.setConfirmed(schedulingDTO.isConfirmed());
 			schedulingEntity.setPresent(schedulingDTO.isPresent());
 			schedulingEntity.setCancel(schedulingDTO.isCancel());
+			schedulingEntity.setPatient(patientEntity);
+			schedulingEntity.setProfessional(professionalEntity);
 			schedulingEntity = schedulingRepository.save(schedulingEntity);			
 			return new SchedulingDTO(schedulingEntity);
 		}catch (EntityNotFoundException e) {

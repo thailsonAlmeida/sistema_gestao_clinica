@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +22,9 @@ public class Manager implements Serializable{
 	private String email;
 	private String contact;
 	private boolean permission;
+	
+	@OneToOne(mappedBy = "manager")
+    private User user;
 	
 	public Manager() {}
 
@@ -72,5 +76,15 @@ public class Manager implements Serializable{
 	public void setPermission(boolean permission) {
 		this.permission = permission;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 
 }

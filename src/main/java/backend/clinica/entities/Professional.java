@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +30,9 @@ public class Professional implements Serializable{
     
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Scheduling> schedulings = new HashSet<>();
+    
+    @OneToOne(mappedBy = "professional")
+    private User user;
     
     public Professional() {}
     
@@ -66,6 +70,14 @@ public class Professional implements Serializable{
 
 	public Set<Scheduling> getSchedulings() {
 		return schedulings;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

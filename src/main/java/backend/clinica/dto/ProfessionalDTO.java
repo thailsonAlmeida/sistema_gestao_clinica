@@ -7,7 +7,6 @@ import java.util.Set;
 
 import backend.clinica.entities.Professional;
 import backend.clinica.entities.Scheduling;
-import backend.clinica.entities.User;
 
 public class ProfessionalDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -18,10 +17,7 @@ public class ProfessionalDTO implements Serializable{
     private String specialty;
     private String contact;
     
-    private List<SchedulingDTO> schedulings = new ArrayList<>();
-    
-    private User user;
-    
+    private List<SchedulingDTO> schedulings = new ArrayList<>();  
     
     public ProfessionalDTO() {}
 
@@ -79,15 +75,5 @@ public class ProfessionalDTO implements Serializable{
 	public List<SchedulingDTO> getSchedulings() {
 		return schedulings;
 	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-	
 	
 }

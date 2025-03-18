@@ -1,12 +1,12 @@
 package backend.clinica.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,10 +22,7 @@ public class Manager implements Serializable{
 	private String email;
 	private String contact;
 	private boolean permission;
-	
-	@OneToOne(mappedBy = "manager")
-    private User user;
-	
+		
 	public Manager() {}
 
 	public Manager(Long id, String name, String email, String contact, boolean permission) {
@@ -77,14 +74,22 @@ public class Manager implements Serializable{
 		this.permission = permission;
 	}
 
-	public User getUser() {
-		return user;
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Manager other = (Manager) obj;
+		return Objects.equals(id, other.id);
 	}
 	
 	
-
 }

@@ -6,10 +6,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import backend.clinica.dto.UserRegisterDTO;
 import backend.clinica.entities.User;
@@ -32,25 +34,24 @@ public class UserController {
 	@PostMapping("/login")
 	public ResponseEntity<UserLoginResponseDTO> login(@RequestBody @Validated UserDTO data) {
 		var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-		var auth = authenticationManager.authenticate(usernamePassword);
-		
-		var token = tokenSerive.generateToken((User)auth.getPrincipal());		
-		
+		var auth = authenticationManager.authenticate(usernamePassword);		
+		var token = tokenSerive.generateToken((User)auth.getPrincipal());
 		return ResponseEntity.ok(new UserLoginResponseDTO(token));
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@RequestBody @Validated UserRegisterDTO data) {
+	public ResponseEntity<UserRegisterDTO> register(@RequestBody @Validated UserRegisterDTO data) {
 		if(this.userRepository.findByLogin(data.login()) != null) 
 			return ResponseEntity.badRequest().build();
-		
 		String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 		User newUser = new User(data.login(), encryptedPassword, data.role());
-		
-		
 		this.userRepository.save(newUser);
-		
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/me")
+	public ResponseEntity<?> getMe(@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(user);
 	}
 	
 }

@@ -1,5 +1,10 @@
 package backend.clinica.services;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,6 +42,53 @@ public class SchedulingService {
 	@Transactional(readOnly = true)
 	public Page<SchedulingDTO> findAllSchedulingPaged(Pageable pageable) {
 		Page<Scheduling> schedulingPage = schedulingRepository.findAll(pageable);
+		
+		Page<SchedulingDTO> schedulingDTOPage = schedulingPage.map(scheduling -> {
+			
+	        SchedulingDTO schedulingDTO = new SchedulingDTO();
+	        
+	        schedulingDTO.setId(scheduling.getId());
+	        schedulingDTO.setDateHour(scheduling.getDateHour());
+	        schedulingDTO.setConfirmed(scheduling.isConfirmed());
+	        schedulingDTO.setPresent(scheduling.isPresent());
+	        schedulingDTO.setCancel(scheduling.isCancel());
+	        
+	        schedulingDTO.setProfessional(
+	        		new ProfessionalDTO(
+	        				scheduling.getProfessional().getId(),
+	        				scheduling.getProfessional().getName(),
+	        				scheduling.getProfessional().getSpecialty(),
+	        				scheduling.getProfessional().getContact()
+	        ));
+	        schedulingDTO.setPatient(
+	        		new PatientDTO(
+	        				scheduling.getPatient().getId(),
+	        				scheduling.getPatient().getName(),
+	        				scheduling.getPatient().getAddress(),
+	        				scheduling.getPatient().getContact(),
+	        				scheduling.getPatient().getBirthDay().toString()
+	        ));
+	        return schedulingDTO;
+	    });
+		
+		return schedulingDTOPage;
+	}
+	
+	
+	@Transactional(readOnly = true)
+	public Page<SchedulingDTO> findAllSchedulingPaged(Pageable pageable, String startDate, String endDate) {
+		// Se não for fornecida uma data de início, define como o primeiro dia do mês atual
+	    LocalDateTime start = (startDate != null && !startDate.isEmpty()) 
+	            ? LocalDateTime.parse(startDate + "T00:00:00") 
+	            : LocalDateTime.of(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()), LocalTime.MIDNIGHT);
+	    
+		    
+	    // Se não for fornecida uma data de fim, define como o último dia do mês atual
+	    LocalDateTime end = (endDate != null && !endDate.isEmpty()) 
+	            ? LocalDateTime.parse(endDate + "T23:59:59") 
+	            : LocalDateTime.of(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()), LocalTime.MAX);
+		    
+		Page<Scheduling> schedulingPage = schedulingRepository.findByDateRange(start, end, pageable);
 		
 		Page<SchedulingDTO> schedulingDTOPage = schedulingPage.map(scheduling -> {
 			

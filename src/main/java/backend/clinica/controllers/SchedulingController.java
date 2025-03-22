@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,11 +27,16 @@ public class SchedulingController {
 	@Autowired
 	private SchedulingService schedulingService;
 	
+	
 	@GetMapping
-	public ResponseEntity<Page<SchedulingDTO>> findAllSchedulingPaged(Pageable pageable){
-		Page<SchedulingDTO> schedulingPage = schedulingService.findAllSchedulingPaged(pageable);		
-		return ResponseEntity.ok().body(schedulingPage);
-	}	
+	public ResponseEntity<Page<SchedulingDTO>> findAllSchedulingPaged(
+	    Pageable pageable,
+	    @RequestParam(required = false) String startDate,
+	    @RequestParam(required = false) String endDate
+	) {
+	    Page<SchedulingDTO> schedulingPage = schedulingService.findAllSchedulingPaged(pageable, startDate, endDate);
+	    return ResponseEntity.ok().body(schedulingPage);
+	}
 	
 	@PostMapping
 	public ResponseEntity<SchedulingDTO> registryScheduling(@RequestBody SchedulingDTO schedulingDTO) {

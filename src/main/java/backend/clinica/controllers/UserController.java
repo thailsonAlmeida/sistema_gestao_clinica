@@ -1,6 +1,7 @@
 package backend.clinica.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import backend.clinica.dto.UserRegisterDTO;
 import backend.clinica.entities.User;
 import backend.clinica.repositories.UserRepository;
 import backend.clinica.configs.TokenService;
+import backend.clinica.dto.AuthenticatedUserDTO;
 import backend.clinica.dto.UserDTO;
 import backend.clinica.dto.UserLoginResponseDTO;
 
@@ -49,9 +51,22 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 	
+	/*
 	@GetMapping("/me")
 	public ResponseEntity<?> getMe(@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(user);
 	}
+	*/
 	
+	@GetMapping("/me")
+    public ResponseEntity<AuthenticatedUserDTO> getAuthenticatedUser(@AuthenticationPrincipal User authenticatedUser) {
+        if (authenticatedUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        User user = userRepository.findById(authenticatedUser.getId()).orElseThrow(() ->
+                new RuntimeException("Usuário não encontrado"));
+
+        return ResponseEntity.ok(new AuthenticatedUserDTO(user));
+    }
 }

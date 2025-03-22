@@ -15,6 +15,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +30,9 @@ public class User implements UserDetails {
 	@JsonIgnore
 	private String password;
 	private UserRole role;
+	
+	@OneToOne(mappedBy = "user")
+	private Professional professional;
 		
 	public User() {}	
 	public User(Long id, String login, String password, UserRole role) {
@@ -70,6 +74,12 @@ public class User implements UserDetails {
 	public void setRole(UserRole role) {
 		this.role = role;
 	}	
+	public Professional getProfessional() {
+		return professional;
+	}
+	public void setProfessional(Professional professional) {
+		this.professional = professional;
+	}
 	
 	@Override
 	public int hashCode() {

@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import backend.clinica.dto.ProfessionalDTO;
 import backend.clinica.entities.Professional;
+import backend.clinica.entities.User;
 import backend.clinica.repositories.ProfessionalRepository;
+import backend.clinica.repositories.UserRepository;
 import backend.clinica.services.exceptions.DataBaseException;
 import backend.clinica.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,6 +26,9 @@ public class ProfessionalService {
 	@Autowired
 	ProfessionalRepository professionalRepository;
 	
+	@Autowired
+	UserRepository userRepository;
+	
 	@Transactional(readOnly = true)
 	public Page<ProfessionalDTO> findAllProfessionalPaged(String name, Pageable pageable) {
 		Page<Professional> listProfessional = professionalRepository.searchByName(name, pageable);		
@@ -34,7 +39,11 @@ public class ProfessionalService {
 	public ProfessionalDTO findByIdProfessional(Long id){
 		Optional<Professional> prefessionalObj = professionalRepository.findById(id);
 		Professional professionalEntity = prefessionalObj.orElseThrow(() -> new ResourceNotFoundException("Profissional inexistente"));
-		return new ProfessionalDTO(professionalEntity, professionalEntity.getSchedulings());
+		User user = new User();
+		user.setLogin(professionalEntity.getUser().getLogin());
+		user.setId(professionalEntity.getUser().getId());
+		user.setRole(professionalEntity.getUser().getRole());
+		return new ProfessionalDTO(professionalEntity, professionalEntity.getSchedulings(), user);
 	}
 	
 	@Transactional(readOnly = true)

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import backend.clinica.entities.Professional;
 import backend.clinica.entities.Scheduling;
+import backend.clinica.entities.User;
 
 public class ProfessionalDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -19,13 +20,23 @@ public class ProfessionalDTO implements Serializable{
     
     private List<SchedulingDTO> schedulings = new ArrayList<>();  
     
+    private User user;
+    
     public ProfessionalDTO() {}
 
-	public ProfessionalDTO(Long id, String name, String specialty, String contact) {
+    public ProfessionalDTO(Long id, String name, String specialty, String contact) {
 		this.id = id;
 		this.name = name;
 		this.specialty = specialty;
 		this.contact = contact;
+	}
+	
+	public ProfessionalDTO(Long id, String name, String specialty, String contact, User user) {
+		this.id = id;
+		this.name = name;
+		this.specialty = specialty;
+		this.contact = contact;
+		this.user = user;
 	}
 	
 	public ProfessionalDTO(Professional professional) {
@@ -38,6 +49,12 @@ public class ProfessionalDTO implements Serializable{
 	public ProfessionalDTO(Professional professional,  Set<Scheduling> schedulings) {
 		this(professional);
 		schedulings.forEach(sched -> this.schedulings.add(new SchedulingDTO(sched, sched.getPatient())));
+	}
+	
+	public ProfessionalDTO(Professional professional,  Set<Scheduling> schedulings, User user) {
+		this(professional);
+		schedulings.forEach(sched -> this.schedulings.add(new SchedulingDTO(sched, sched.getPatient())));
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -74,6 +91,14 @@ public class ProfessionalDTO implements Serializable{
 
 	public List<SchedulingDTO> getSchedulings() {
 		return schedulings;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

@@ -11,7 +11,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +31,10 @@ public class Professional implements Serializable{
     
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Scheduling> schedulings = new HashSet<>();
+    
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
+    private User user;
       
     public Professional() {}
     
@@ -37,6 +43,13 @@ public class Professional implements Serializable{
 		this.name = name;
 		this.specialty = specialty;
 		this.contact = contact;
+	}
+	public Professional(Long id, String name, String specialty, String contact, User user) {
+		this.id = id;
+		this.name = name;
+		this.specialty = specialty;
+		this.contact = contact;
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -66,6 +79,14 @@ public class Professional implements Serializable{
 
 	public Set<Scheduling> getSchedulings() {
 		return schedulings;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

@@ -49,9 +49,7 @@ public class ProfessionalService {
 	@Transactional(readOnly = true)
 	public ProfessionalDTO registryProfessional(ProfessionalDTO dtoProfessional) {
 		Professional professionalEntity = new Professional();
-		professionalEntity.setName(dtoProfessional.getName());
-		professionalEntity.setSpecialty(dtoProfessional.getSpecialty());
-		professionalEntity.setContact(dtoProfessional.getContact());
+		professionalEntity = copyDtoProfessional(professionalEntity, dtoProfessional);
 		professionalEntity = professionalRepository.save(professionalEntity);
 		return new ProfessionalDTO(professionalEntity);
 	}	
@@ -60,9 +58,7 @@ public class ProfessionalService {
 	public ProfessionalDTO updateRegistryProfessional(Long id, ProfessionalDTO professionalDTO) {
 		try {
 			Professional professionalEntity = professionalRepository.getReferenceById(id);
-			professionalEntity.setName(professionalDTO.getName());
-			professionalEntity.setSpecialty(professionalDTO.getSpecialty());
-			professionalEntity.setContact(professionalDTO.getContact());	
+			professionalEntity = copyDtoProfessional(professionalEntity, professionalDTO);
 			professionalEntity = professionalRepository.save(professionalEntity);
 			return new ProfessionalDTO(professionalEntity);		
 		}catch (EntityNotFoundException e) {
@@ -78,6 +74,13 @@ public class ProfessionalService {
 		}catch (DataIntegrityViolationException e) {
 			throw new DataBaseException("Violação de integridade");
 		}
+	}
+	
+	public Professional copyDtoProfessional(Professional professionalEntity, ProfessionalDTO professionalDTO) {
+		professionalEntity.setName(professionalDTO.getName());
+		professionalEntity.setSpecialty(professionalDTO.getSpecialty());
+		professionalEntity.setContact(professionalDTO.getContact());
+		return professionalEntity;
 	}
 	
 }

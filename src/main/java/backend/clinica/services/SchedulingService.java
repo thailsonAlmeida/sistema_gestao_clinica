@@ -3,6 +3,7 @@ package backend.clinica.services;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +32,17 @@ import jakarta.persistence.EntityNotFoundException;
 public class SchedulingService {
 	
 	@Autowired
-	SchedulingRepository schedulingRepository;
+	private SchedulingRepository schedulingRepository;
 	
 	@Autowired
-	PatientRepository patientRepository;
+	private PatientRepository patientRepository;
 	
 	@Autowired
-	ProfessionalRepository professionalRepository;
+	private ProfessionalRepository professionalRepository;
 	
+	@Autowired
+	private EmailService emailService;
+		
 	@Transactional(readOnly = true)
 	public Page<SchedulingDTO> findAllSchedulingPaged(Pageable pageable) {
 		Page<Scheduling> schedulingPage = schedulingRepository.findAll(pageable);
@@ -53,21 +57,8 @@ public class SchedulingService {
 	        schedulingDTO.setPresent(scheduling.isPresent());
 	        schedulingDTO.setCancel(scheduling.isCancel());
 	        
-	        schedulingDTO.setProfessional(
-	        		new ProfessionalDTO(
-	        				scheduling.getProfessional().getId(),
-	        				scheduling.getProfessional().getName(),
-	        				scheduling.getProfessional().getSpecialty(),
-	        				scheduling.getProfessional().getContact()
-	        ));
-	        schedulingDTO.setPatient(
-	        		new PatientDTO(
-	        				scheduling.getPatient().getId(),
-	        				scheduling.getPatient().getName(),
-	        				scheduling.getPatient().getAddress(),
-	        				scheduling.getPatient().getContact(),
-	        				scheduling.getPatient().getBirthDay().toString()
-	        ));
+	        schedulingDTO.setProfessional(factoryDtoProfessional(scheduling));
+	        schedulingDTO.setPatient(factoryDtoPatient(scheduling));
 	        return schedulingDTO;
 	    });
 		
@@ -100,21 +91,8 @@ public class SchedulingService {
 	        schedulingDTO.setPresent(scheduling.isPresent());
 	        schedulingDTO.setCancel(scheduling.isCancel());
 	        
-	        schedulingDTO.setProfessional(
-	        		new ProfessionalDTO(
-	        				scheduling.getProfessional().getId(),
-	        				scheduling.getProfessional().getName(),
-	        				scheduling.getProfessional().getSpecialty(),
-	        				scheduling.getProfessional().getContact()
-	        ));
-	        schedulingDTO.setPatient(
-	        		new PatientDTO(
-	        				scheduling.getPatient().getId(),
-	        				scheduling.getPatient().getName(),
-	        				scheduling.getPatient().getAddress(),
-	        				scheduling.getPatient().getContact(),
-	        				scheduling.getPatient().getBirthDay().toString()
-	        ));
+	        schedulingDTO.setProfessional(factoryDtoProfessional(scheduling));
+	        schedulingDTO.setPatient(factoryDtoPatient(scheduling));
 	        return schedulingDTO;
 	    });
 		
@@ -144,19 +122,25 @@ public class SchedulingService {
 		try {	
 			Scheduling schedulingEntity = schedulingRepository.getReferenceById(id);	
 			
+			boolean wasConfirmedBefore = schedulingEntity.isConfirmed(); // valor antigo
+			
 			Patient patientEntity = new Patient();		
 			Professional professionalEntity = new Professional();
 			patientEntity.setId(schedulingDTO.getPatient().getId());
 			professionalEntity.setId(schedulingDTO.getProfessional().getId());
 			
-			schedulingEntity.setDateHour(schedulingDTO.getDateHour());
-			schedulingEntity.setConfirmed(schedulingDTO.isConfirmed());
-			schedulingEntity.setPresent(schedulingDTO.isPresent());
-			schedulingEntity.setCancel(schedulingDTO.isCancel());
+			schedulingEntity = copyDtoScheduling(schedulingDTO, schedulingEntity);
 			schedulingEntity.setPatient(patientEntity);
 			schedulingEntity.setProfessional(professionalEntity);
-			schedulingEntity = schedulingRepository.save(schedulingEntity);			
+			schedulingEntity = schedulingRepository.save(schedulingEntity);	
+			
+			//Observer: detecta mudança de false → true no campo "confirmed"
+	        if (!wasConfirmedBefore && schedulingEntity.isConfirmed()) {
+	            sendEmailPatient(patientEntity, professionalEntity, schedulingEntity);
+	        }
+	        
 			return new SchedulingDTO(schedulingEntity);
+			
 		}catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("ID do agendamento inexistente: " + id);
 		}
@@ -171,5 +155,98 @@ public class SchedulingService {
 			throw new DataBaseException("Violação de integridade");
 		}
 	}
+	
+	public void sendEmailPatient(Patient patientEntity, Professional professionalEntity, Scheduling schedulingEntity) {
+		// Carrega o paciente e profissional com dados completos
+        Patient patient = patientRepository.findById(patientEntity.getId())
+            .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
+        Professional professional = professionalRepository.findById(professionalEntity.getId())
+            .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
+        
+     // Formatador para dd/MM/yyyy
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy  HH:mm");
+        String formattedDate = schedulingEntity.getDateHour().format(formatter);
 
+        String subject = "Confirmação de Agendamento";
+        String message = String.format(
+            "Olá %s,\n\nSeu agendamento com o profissional %s foi confirmado para o dia %s \n\nObrigado por escolher nossa clínica!",
+            patient.getName(),
+            professional.getName(),
+            formattedDate
+        );
+
+        // Envia o e-mail (usa o e-mail real do paciente)
+        if (patient.getEmail() != null && !patient.getEmail().isEmpty()) {
+            emailService.sendConfirmationEmail(patient.getEmail(), subject, message);
+        }
+	}
+	
+	@Transactional
+	public SchedulingDTO confirmScheduling(Long id, SchedulingDTO schedulingDTO) {
+	    try {
+	        Scheduling schedulingEntity = schedulingRepository.getReferenceById(id);
+			
+	        Patient patientEntity = patientRepository.findById(schedulingDTO.getPatient().getId())
+	        	    .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
+
+	        Professional professionalEntity = professionalRepository.findById(schedulingDTO.getProfessional().getId())
+	        	    .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
+						
+			schedulingEntity.setDateHour(schedulingDTO.getDateHour());
+			schedulingEntity.setConfirmed(schedulingDTO.isConfirmed());
+			schedulingEntity.setPresent(schedulingDTO.isPresent());
+			schedulingEntity.setCancel(schedulingDTO.isCancel());
+			schedulingEntity.setPatient(patientEntity);
+			schedulingEntity.setProfessional(professionalEntity);
+
+			
+	        if (schedulingEntity.isConfirmed()) {
+	            schedulingEntity.setConfirmed(true);
+	            schedulingRepository.save(schedulingEntity);
+
+	            // Enviar e-mail de confirmação para o paciente
+	            String subject = "Confirmação de Agendamento";
+	            String message = String.format(
+	                "Olá %s,\n\nSeu agendamento com o profissional %s foi realizado com sucesso no dia %s.\n\nObrigado por escolher nossa clínica!",
+	                schedulingEntity.getPatient().getName(),
+	                schedulingEntity.getProfessional().getName(),
+	                schedulingEntity.getDateHour()
+	            );
+
+	            emailService.sendConfirmationEmail("a4611ac39c-6e3ffb+1@inbox.mailtrap.io", subject, message);
+	        }						
+
+	        return new SchedulingDTO(schedulingEntity);
+	    } catch (EntityNotFoundException e) {
+	        throw new ResourceNotFoundException("ID do agendamento inexistente: " + id);
+	    }
+	}
+	
+	public Scheduling copyDtoScheduling(SchedulingDTO schedulingDTO, Scheduling schedulingEntity) {
+		schedulingEntity.setDateHour(schedulingDTO.getDateHour());
+		schedulingEntity.setConfirmed(schedulingDTO.isConfirmed());
+		schedulingEntity.setPresent(schedulingDTO.isPresent());
+		schedulingEntity.setCancel(schedulingDTO.isCancel());		
+		return schedulingEntity;
+	}
+	
+	public ProfessionalDTO factoryDtoProfessional(Scheduling scheduling) {
+		return new ProfessionalDTO(
+				scheduling.getProfessional().getId(),
+				scheduling.getProfessional().getName(),
+				scheduling.getProfessional().getSpecialty(),
+				scheduling.getProfessional().getContact()
+		);
+	}
+	
+	public PatientDTO factoryDtoPatient(Scheduling scheduling) {
+		return new PatientDTO(
+				scheduling.getPatient().getId(),
+				scheduling.getPatient().getName(),
+				scheduling.getPatient().getAddress(),
+				scheduling.getPatient().getContact(),
+				scheduling.getPatient().getBirthDay().toString(),
+				scheduling.getPatient().getEmail()
+		);
+	}
 }

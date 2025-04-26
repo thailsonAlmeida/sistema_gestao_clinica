@@ -15,6 +15,7 @@ public class PatientDTO implements Serializable{
 
     private String name;
     private String address;
+    private String email;
     private String contact;
     private String birthDay;   
     
@@ -22,12 +23,13 @@ public class PatientDTO implements Serializable{
     
     public PatientDTO() {}
 
-	public PatientDTO(Long id, String name, String address, String contact, String birthDay) {
+	public PatientDTO(Long id, String name, String address, String contact, String birthDay, String email) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.contact = contact;
 		this.birthDay = birthDay;
+		this.email = email;
 	}
     
     public PatientDTO(Patient patient) {
@@ -36,6 +38,7 @@ public class PatientDTO implements Serializable{
 		this.address = patient.getAddress();
 		this.contact = patient.getContact();
 		this.birthDay = patient.getBirthDay();
+		this.email = patient.getEmail();
     }
     
     public PatientDTO(Patient patient, Set<Report> reports) {
@@ -81,6 +84,14 @@ public class PatientDTO implements Serializable{
 
 	public void setBirthDay(String birthDay) {
 		this.birthDay = birthDay;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public List<ReportDTO> getReportHistory() {

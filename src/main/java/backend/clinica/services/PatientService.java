@@ -39,11 +39,8 @@ public class PatientService {
 	@Transactional(readOnly = true)
 	public PatientDTO registryPatient(PatientDTO patientDTO) {	
 		Patient patientEntity = new Patient();
-		patientEntity.setName(patientDTO.getName());
-		patientEntity.setAddress(patientDTO.getAddress());
-		patientEntity.setContact(patientDTO.getContact());
-		patientEntity.setBirthDay(patientDTO.getBirthDay());
-		patientEntity = patientRepository.save(patientEntity);
+		patientEntity = copyDtoPatient(patientEntity, patientDTO);
+		patientEntity = patientRepository.save(patientEntity);		
 		return new PatientDTO(patientEntity);
 	}	
 
@@ -51,10 +48,7 @@ public class PatientService {
 	public PatientDTO updateRegistryPatient(Long id, PatientDTO patientDTO) {
 		try {
 			Patient patientEntity = patientRepository.getReferenceById(id);
-			patientEntity.setName(patientDTO.getName());
-			patientEntity.setAddress(patientDTO.getAddress());
-			patientEntity.setContact(patientDTO.getContact());
-			patientEntity.setBirthDay(patientDTO.getBirthDay());
+			patientEntity = copyDtoPatient(patientEntity, patientDTO);
 			patientEntity = patientRepository.save(patientEntity);
 			return new PatientDTO(patientEntity);
 		
@@ -71,6 +65,15 @@ public class PatientService {
 		}catch (DataIntegrityViolationException e) {
 			throw new DataBaseException("Violação de integridade");
 		}
+	}
+	
+	public Patient copyDtoPatient(Patient patientEntity, PatientDTO patientDTO) {
+		patientEntity.setName(patientDTO.getName());
+		patientEntity.setAddress(patientDTO.getAddress());
+		patientEntity.setContact(patientDTO.getContact());
+		patientEntity.setBirthDay(patientDTO.getBirthDay());
+		patientEntity.setEmail(patientDTO.getEmail());
+		return patientEntity;
 	}
 
 }

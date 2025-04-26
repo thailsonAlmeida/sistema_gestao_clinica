@@ -25,6 +25,7 @@ public class Patient implements Serializable{
 
     private String name;
     private String address;
+    private String email;
     private String contact;
     private String birthDay;   
     
@@ -33,12 +34,13 @@ public class Patient implements Serializable{
     
     public Patient() {}   
     
-	public Patient(Long id, String name, String address, String contact, String birthDay) {
+	public Patient(Long id, String name, String address, String contact, String birthDay, String email) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.contact = contact;
 		this.birthDay = birthDay;
+		this.email = email;
 	}	
 
 	public Long getId() {
@@ -75,6 +77,14 @@ public class Patient implements Serializable{
 	public Set<Report> getReportHistory() {
 		return reportHistory;
 	}	
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	@Override
 	public int hashCode() {

@@ -29,10 +29,7 @@ public class ReportService {
 		
 		patientEntity.setId(reportDTO.getPatient().getId());
 		professionalEntity.setId(reportDTO.getProfessional().getId());
-		
-		reportEntity.setDateReport(reportDTO.getDateReport());
-		reportEntity.setReportType(reportDTO.getReportType());
-		reportEntity.setDescription(reportDTO.getDescription());
+		reportEntity = copyDtoReport(reportDTO, reportEntity);
 		reportEntity.setPatient(patientEntity);
 		reportEntity.setProfessional(professionalEntity);
 		reportEntity = reportRepository.save(reportEntity);
@@ -43,9 +40,7 @@ public class ReportService {
 	public ReportDTO updateRegistryReport(Long id, ReportDTO reportDTO) {
 		try {
 			Report reportEntity = reportRepository.getReferenceById(id);
-			reportEntity.setDateReport(reportDTO.getDateReport());
-			reportEntity.setReportType(reportDTO.getReportType());
-			reportEntity.setDescription(reportDTO.getDescription());
+			reportEntity = copyDtoReport(reportDTO, reportEntity);
 			reportEntity = reportRepository.save(reportEntity);
 			return new ReportDTO(reportEntity);
 		} catch (EntityNotFoundException e) {
@@ -63,6 +58,12 @@ public class ReportService {
 		}
 	}
 	
+	public Report copyDtoReport(ReportDTO reportDTO, Report reportEntity) {
+		reportEntity.setDateReport(reportDTO.getDateReport());
+		reportEntity.setReportType(reportDTO.getReportType());
+		reportEntity.setDescription(reportDTO.getDescription());
+		return reportEntity;
+	}
 	
 
 }

@@ -61,4 +61,9 @@ public class SchedulingController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PutMapping("/{id}/confirm")
+	public ResponseEntity<SchedulingDTO> confirmScheduling(@PathVariable Long id, @RequestBody SchedulingDTO schedulingDTO) {
+	    schedulingDTO = schedulingService.confirmScheduling(id, schedulingDTO);
+	    return ResponseEntity.ok().body(schedulingDTO);
+	}
 }

@@ -25,8 +25,6 @@ public class TokenService {
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            
-            // Obtendo as authorities do usuário como uma string separada por vírgula
             String roles = user.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.joining(","));
@@ -34,7 +32,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("clinica")
                     .withSubject(user.getLogin())
-                    .withClaim("authorities", roles) // Adiciona as authorities no payload
+                    .withClaim("authorities", roles)
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
             
@@ -50,13 +48,11 @@ public class TokenService {
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            
             return JWT.require(algorithm)
                     .withIssuer("clinica")
                     .build()
                     .verify(token)
-                    .getSubject(); // Isso retorna apenas o usuário
-            
+                    .getSubject();
         } catch (JWTVerificationException exception) {
             return "";
         }

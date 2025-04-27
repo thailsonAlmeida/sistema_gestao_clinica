@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +43,7 @@ public class SchedulingService {
 	
 	@Autowired
 	private EmailService emailService;
-		
+			
 	@Transactional(readOnly = true)
 	public Page<SchedulingDTO> findAllSchedulingPaged(Pageable pageable) {
 		Page<Scheduling> schedulingPage = schedulingRepository.findAll(pageable);
@@ -156,6 +157,7 @@ public class SchedulingService {
 		}
 	}
 	
+	@Async
 	public void sendEmailPatient(Patient patientEntity, Professional professionalEntity, Scheduling schedulingEntity) {
 		// Carrega o paciente e profissional com dados completos
         Patient patient = patientRepository.findById(patientEntity.getId())
@@ -180,6 +182,7 @@ public class SchedulingService {
             emailService.sendConfirmationEmail(patient.getEmail(), subject, message);
         }
 	}
+	
 	
 	@Transactional
 	public SchedulingDTO confirmScheduling(Long id, SchedulingDTO schedulingDTO) {

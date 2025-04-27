@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,9 +28,13 @@ public class SecurityFilter extends OncePerRequestFilter {
 		var token = this.recoverToken(request);
 		if(token != null) {
 			var login = tokenService.validateToken(token);
-			UserDetails user = userRepository.findByLogin(login);
-			var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			
+			var user = userRepository.findByLogin(login);
+			
+			if (user.isEnabled()) {
+			    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+			    SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
 		}
 		filterChain.doFilter(request, response);
 	}

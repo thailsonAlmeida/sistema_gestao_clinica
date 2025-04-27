@@ -51,11 +51,11 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     private void seedProfessionals() {
-        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, USER_ID) VALUES ('Luana Silva Assunção', 'Audiologia','(15) 98965-7895', 201)").executeUpdate();
-        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, USER_ID) VALUES ('Clara Almeida Teles', 'Linguagem','(15) 94758-4656', 202)").executeUpdate();
-        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, USER_ID) VALUES ('Leticia Farias Assad', 'Voz','(15) 99856-6985', 203)").executeUpdate();
-        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, USER_ID) VALUES ('Leila Fagundes Silva', 'Disfagia','(15) 97856-8745', 204)").executeUpdate();
-        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, USER_ID) VALUES ('Laura Pereira Beltrão', 'Fonoaudiologia Escolar','(15) 98974-6584', 205)").executeUpdate();
+        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, EMAIL, USER_ID) VALUES ('Luana Silva Assunção', 'Audiologia','(15) 98965-7895', 'luana@email.com', 201)").executeUpdate();
+        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, EMAIL, USER_ID) VALUES ('Clara Almeida Teles', 'Linguagem','(15) 94758-4656', 'clara@email.com', 202)").executeUpdate();
+        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, EMAIL, USER_ID) VALUES ('Leticia Farias Assad', 'Voz','(15) 99856-6985', 'leticia@email.com', 203)").executeUpdate();
+        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, EMAIL, USER_ID) VALUES ('Leila Fagundes Silva', 'Disfagia','(15) 97856-8745', 'leila@email.com', 204)").executeUpdate();
+        entityManager.createNativeQuery("INSERT INTO TB_PROFESSIONAL (NAME, SPECIALTY, CONTACT, EMAIL, USER_ID) VALUES ('Laura Pereira Beltrão', 'Fonoaudiologia Escolar','(15) 98974-6584', 'laura@email.com', 205)").executeUpdate();
         // Adicione os demais profissionais aqui...
     }
 

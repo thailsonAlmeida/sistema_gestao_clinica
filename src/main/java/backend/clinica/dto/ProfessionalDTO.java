@@ -17,6 +17,7 @@ public class ProfessionalDTO implements Serializable{
     private String name;
     private String specialty;
     private String contact;
+    private String email;
     
     private List<SchedulingDTO> schedulings = new ArrayList<>();  
     
@@ -24,18 +25,20 @@ public class ProfessionalDTO implements Serializable{
     
     public ProfessionalDTO() {}
 
-    public ProfessionalDTO(Long id, String name, String specialty, String contact) {
+    public ProfessionalDTO(Long id, String name, String specialty, String contact, String email) {
 		this.id = id;
 		this.name = name;
 		this.specialty = specialty;
 		this.contact = contact;
+		this.email = email;
 	}
 	
-	public ProfessionalDTO(Long id, String name, String specialty, String contact, User user) {
+	public ProfessionalDTO(Long id, String name, String specialty, String contact, String email, User user) {
 		this.id = id;
 		this.name = name;
 		this.specialty = specialty;
 		this.contact = contact;
+		this.email = email;
 		this.user = user;
 	}
 	
@@ -44,6 +47,7 @@ public class ProfessionalDTO implements Serializable{
 		this.name = professional.getName();
 		this.specialty = professional.getSpecialty();
 		this.contact = professional.getContact();
+		this.email = professional.getEmail();
 	}
 	
 	public ProfessionalDTO(Professional professional,  Set<Scheduling> schedulings) {
@@ -99,6 +103,14 @@ public class ProfessionalDTO implements Serializable{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }

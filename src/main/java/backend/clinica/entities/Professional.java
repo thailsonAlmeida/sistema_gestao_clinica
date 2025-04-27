@@ -27,6 +27,7 @@ public class Professional implements Serializable{
 
     private String name;
     private String specialty;
+    private String email;
     private String contact;
     
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -38,17 +39,19 @@ public class Professional implements Serializable{
       
     public Professional() {}
     
-	public Professional(Long id, String name, String specialty, String contact) {
+	public Professional(Long id, String name, String specialty, String contact, String email) {
 		this.id = id;
 		this.name = name;
 		this.specialty = specialty;
+		this.email = email;
 		this.contact = contact;
 	}
-	public Professional(Long id, String name, String specialty, String contact, User user) {
+	public Professional(Long id, String name, String specialty, String contact,  String email, User user) {
 		this.id = id;
 		this.name = name;
 		this.specialty = specialty;
 		this.contact = contact;
+		this.email = email;
 		this.user = user;
 	}
 
@@ -87,6 +90,14 @@ public class Professional implements Serializable{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Override

@@ -238,7 +238,8 @@ public class SchedulingService {
 				scheduling.getProfessional().getId(),
 				scheduling.getProfessional().getName(),
 				scheduling.getProfessional().getSpecialty(),
-				scheduling.getProfessional().getContact()
+				scheduling.getProfessional().getContact(),
+				scheduling.getProfessional().getEmail()
 		);
 	}
 	

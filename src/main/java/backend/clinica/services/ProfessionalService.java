@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import backend.clinica.dto.ProfessionalDTO;
+import backend.clinica.dto.UserRegisterDTO;
 import backend.clinica.entities.Professional;
 import backend.clinica.entities.User;
+import backend.clinica.enums.UserRole;
 import backend.clinica.repositories.ProfessionalRepository;
 import backend.clinica.repositories.UserRepository;
 import backend.clinica.services.exceptions.DataBaseException;
@@ -28,6 +30,10 @@ public class ProfessionalService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserService userService;
+	
 	
 	@Transactional(readOnly = true)
 	public Page<ProfessionalDTO> findAllProfessionalPaged(String name, Pageable pageable) {
@@ -48,9 +54,26 @@ public class ProfessionalService {
 	
 	@Transactional(readOnly = true)
 	public ProfessionalDTO registryProfessional(ProfessionalDTO dtoProfessional) {
-		Professional professionalEntity = new Professional();
-		professionalEntity = copyDtoProfessional(professionalEntity, dtoProfessional);
+		
+		// Verifica se o usuário já existe
+	    User existingUser = userRepository.findByLogin(dtoProfessional.getEmail());
+	    if (existingUser != null) {
+	        throw new ResourceNotFoundException("Usuário com esse e-mail já existe.");
+	    }
+		
+		//criar user		
+		UserRegisterDTO userRegisterDTO = new UserRegisterDTO(dtoProfessional.getEmail(), "123456789", UserRole.PROFESSIONAL);
+		userService.register(userRegisterDTO);
+		
+		//se criou puxar dados 
+		User newUserProfessional = userRepository.findByLogin(dtoProfessional.getEmail());
+		
+		
+		//se deu certo a criação do user, cadastrar profisisonal associando ao user criado
+		Professional  professionalEntity = copyDtoProfessional(new Professional(), dtoProfessional);
+		professionalEntity.setUser(newUserProfessional);
 		professionalEntity = professionalRepository.save(professionalEntity);
+		
 		return new ProfessionalDTO(professionalEntity);
 	}	
 
@@ -80,6 +103,7 @@ public class ProfessionalService {
 		professionalEntity.setName(professionalDTO.getName());
 		professionalEntity.setSpecialty(professionalDTO.getSpecialty());
 		professionalEntity.setContact(professionalDTO.getContact());
+		professionalEntity.setEmail(professionalDTO.getEmail());
 		return professionalEntity;
 	}
 	

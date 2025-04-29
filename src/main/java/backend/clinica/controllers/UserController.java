@@ -15,6 +15,7 @@ import backend.clinica.dto.UserRegisterDTO;
 import backend.clinica.entities.User;
 import backend.clinica.services.UserService;
 import backend.clinica.dto.AuthenticatedUserDTO;
+import backend.clinica.dto.ChangePasswordDTO;
 import backend.clinica.dto.UserDTO;
 import backend.clinica.dto.UserLoginResponseDTO;
 
@@ -48,5 +49,20 @@ public class UserController {
         }
         AuthenticatedUserDTO userDto = userService.getAuthenticatedUser(authenticatedUser);
         return ResponseEntity.ok(userDto);
+    }
+    
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody @Validated ChangePasswordDTO data,
+                                            @AuthenticationPrincipal User authenticatedUser) {
+        if (authenticatedUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        boolean changed = userService.changePassword(authenticatedUser, data);
+        if (changed) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Senha atual incorreta.");
+        }
     }
 }

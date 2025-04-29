@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import backend.clinica.configs.TokenService;
 import backend.clinica.dto.AuthenticatedUserDTO;
+import backend.clinica.dto.ChangePasswordDTO;
 import backend.clinica.dto.UserDTO;
 import backend.clinica.dto.UserRegisterDTO;
 import backend.clinica.entities.User;
@@ -55,5 +56,22 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(authenticatedUser.getId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         return new AuthenticatedUserDTO(user);
+    }
+    
+    public boolean changePassword(User authenticatedUser, ChangePasswordDTO data) {
+        User user = userRepository.findById(authenticatedUser.getId())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // Verificar se a senha antiga está correta
+        if (!passwordEncoder.matches(data.getOldPassword(), user.getPassword())) {
+            return false; // Senha antiga não confere
+        }
+
+        // Atualizar para a nova senha (codificada)
+        String newPasswordEncoded = passwordEncoder.encode(data.getNewPassword());
+        user.setPassword(newPasswordEncoded);
+
+        userRepository.save(user);
+        return true;
     }
 }

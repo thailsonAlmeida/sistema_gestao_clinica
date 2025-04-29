@@ -26,6 +26,7 @@ public class SecurityConfigurations {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+        	.cors(cors -> {})
             .csrf(csrf -> csrf.disable())
             .headers(headers -> extracted(headers)) // Libera H2 Console
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

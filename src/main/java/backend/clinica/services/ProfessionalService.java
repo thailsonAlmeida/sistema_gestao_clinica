@@ -104,6 +104,7 @@ public class ProfessionalService {
 		professionalEntity.setSpecialty(professionalDTO.getSpecialty());
 		professionalEntity.setContact(professionalDTO.getContact());
 		professionalEntity.setEmail(professionalDTO.getEmail());
+		professionalEntity.setRegistry(professionalDTO.getRegistry());
 		return professionalEntity;
 	}
 	

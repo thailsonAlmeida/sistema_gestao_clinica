@@ -239,7 +239,8 @@ public class SchedulingService {
 				scheduling.getProfessional().getName(),
 				scheduling.getProfessional().getSpecialty(),
 				scheduling.getProfessional().getContact(),
-				scheduling.getProfessional().getEmail()
+				scheduling.getProfessional().getEmail(),
+				scheduling.getProfessional().getRegistry()
 		);
 	}
 	

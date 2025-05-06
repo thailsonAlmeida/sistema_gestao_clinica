@@ -51,6 +51,7 @@ public class ProfessionalDTO implements Serializable{
 		this.specialty = professional.getSpecialty();
 		this.contact = professional.getContact();
 		this.email = professional.getEmail();
+		this.registry = professional.getRegistry();
 	}
 	
 	public ProfessionalDTO(Professional professional,  Set<Scheduling> schedulings) {

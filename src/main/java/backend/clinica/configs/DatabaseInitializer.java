@@ -16,7 +16,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        clearDatabase(); // limpa todas as tabelas
+        //clearDatabase(); // limpa todas as tabelas
         seedUsers();     // insere novos usuários
     }  
 

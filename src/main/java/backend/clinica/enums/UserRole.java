@@ -2,8 +2,8 @@ package backend.clinica.enums;
 
 public enum UserRole {
     
-    PROFESSIONAL("PROFESSIONAL"),
-    MANAGER("MANAGER");
+	PROFESSIONAL("ROLE_PROFESSIONAL"),
+    MANAGER("ROLE_MANAGER");
     
     private String role;
     

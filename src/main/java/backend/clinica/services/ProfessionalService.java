@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,13 +34,13 @@ public class ProfessionalService {
 	UserService userService;
 	
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public Page<ProfessionalDTO> findAllProfessionalPaged(String name, Pageable pageable) {
 		Page<Professional> listProfessional = professionalRepository.searchByName(name, pageable);		
 		return listProfessional.map(x -> new ProfessionalDTO(x));
 	}
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public ProfessionalDTO findByIdProfessional(Long id){
 		Optional<Professional> prefessionalObj = professionalRepository.findById(id);
 		Professional professionalEntity = prefessionalObj.orElseThrow(() -> new ResourceNotFoundException("Profissional inexistente"));
@@ -52,7 +51,7 @@ public class ProfessionalService {
 		return new ProfessionalDTO(professionalEntity, professionalEntity.getSchedulings(), user);
 	}
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public ProfessionalDTO registryProfessional(ProfessionalDTO dtoProfessional) {
 		
 		// Verifica se o usuário já existe
@@ -89,14 +88,24 @@ public class ProfessionalService {
 		}		
 	}
 	
+	@Transactional
 	public void deleteProfessional(Long id) {
-		try {
-			professionalRepository.deleteById(id);
-		}catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException("ID do profissional inexistente: " + id);
-		}catch (DataIntegrityViolationException e) {
-			throw new DataBaseException("Violação de integridade");
-		}
+	    try {
+	        // Recupera o profissional
+	        Professional professional = professionalRepository.findById(id)
+	            .orElseThrow(() -> new ResourceNotFoundException("ID do profissional inexistente: " + id));
+	        
+	        // Deleta primeiro o profissional
+	        professionalRepository.delete(professional);
+
+	        // Deleta o usuário associado
+	        if (professional.getUser() != null) {
+	            userRepository.delete(professional.getUser());
+	        }
+
+	    } catch (DataIntegrityViolationException e) {
+	        throw new DataBaseException("Violação de integridade");
+	    }
 	}
 	
 	public Professional copyDtoProfessional(Professional professionalEntity, ProfessionalDTO professionalDTO) {

@@ -21,7 +21,7 @@ public class ReportService {
 	@Autowired
 	ReportRepository reportRepository;
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public ReportDTO registryReport(ReportDTO reportDTO) {
 		Report reportEntity = new Report();
 		Patient patientEntity = new Patient();		

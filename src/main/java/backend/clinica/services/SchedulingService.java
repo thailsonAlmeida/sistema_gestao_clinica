@@ -44,7 +44,7 @@ public class SchedulingService {
 	@Autowired
 	private EmailService emailService;
 			
-	@Transactional(readOnly = true)
+	@Transactional
 	public Page<SchedulingDTO> findAllSchedulingPaged(Pageable pageable) {
 		Page<Scheduling> schedulingPage = schedulingRepository.findAll(pageable);
 		
@@ -67,48 +67,46 @@ public class SchedulingService {
 	}
 	
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public Page<SchedulingDTO> findAllSchedulingPaged(Pageable pageable, String startDate, String endDate) {
-		// Se não for fornecida uma data de início, define como o primeiro dia do mês atual
-	    LocalDateTime start = (startDate != null && !startDate.isEmpty()) 
-	            ? LocalDateTime.parse(startDate + "T00:00:00") 
+	    // Define datas padrão caso não sejam fornecidas
+	    LocalDateTime start = (startDate != null && !startDate.isEmpty())
+	            ? LocalDateTime.parse(startDate + "T00:00:00")
 	            : LocalDateTime.of(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()), LocalTime.MIDNIGHT);
-	    
-		    
-	    // Se não for fornecida uma data de fim, define como o último dia do mês atual
-	    LocalDateTime end = (endDate != null && !endDate.isEmpty()) 
-	            ? LocalDateTime.parse(endDate + "T23:59:59") 
+
+	    LocalDateTime end = (endDate != null && !endDate.isEmpty())
+	            ? LocalDateTime.parse(endDate + "T23:59:59")
 	            : LocalDateTime.of(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()), LocalTime.MAX);
-		    
-		Page<Scheduling> schedulingPage = schedulingRepository.findByDateRange(start, end, pageable);
-		
-		Page<SchedulingDTO> schedulingDTOPage = schedulingPage.map(scheduling -> {
-			
-	        SchedulingDTO schedulingDTO = new SchedulingDTO();
-	        
-	        schedulingDTO.setId(scheduling.getId());
-	        schedulingDTO.setDateHour(scheduling.getDateHour());
-	        schedulingDTO.setConfirmed(scheduling.isConfirmed());
-	        schedulingDTO.setPresent(scheduling.isPresent());
-	        schedulingDTO.setCancel(scheduling.isCancel());
-	        
-	        schedulingDTO.setProfessional(factoryDtoProfessional(scheduling));
-	        schedulingDTO.setPatient(factoryDtoPatient(scheduling));
-	        return schedulingDTO;
+
+	    Page<Scheduling> schedulingPage = schedulingRepository.findByDateRange(start, end, pageable);
+
+	    return schedulingPage.map(scheduling -> {
+	        SchedulingDTO dto = new SchedulingDTO();
+	        dto.setId(scheduling.getId());
+	        dto.setDateHour(scheduling.getDateHour());
+	        dto.setConfirmed(scheduling.isConfirmed());
+	        dto.setPresent(scheduling.isPresent());
+	        dto.setCancel(scheduling.isCancel());
+	        dto.setProfessional(factoryDtoProfessional(scheduling));
+	        dto.setPatient(factoryDtoPatient(scheduling));
+	        return dto;
 	    });
-		
-		return schedulingDTOPage;
 	}
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public SchedulingDTO registryScheduling(SchedulingDTO schedulingDTO) {
 		Long professionalId = schedulingDTO.getProfessional().getId();
 	    LocalDateTime dateHour = schedulingDTO.getDateHour();
+	    LocalDateTime today = LocalDateTime.now();
 
 	    // Verifica se já existe agendamento nesse horário para o profissional
 	    boolean isBusy = schedulingRepository.existsByProfessionalIdAndDateHour(professionalId, dateHour);
 	    if (isBusy) {
 	        throw new DataBaseException("O profissional já possui um agendamento nesse horário.");
+	    }
+	    
+	    if(dateHour.isBefore(today)) {
+	    	throw new IllegalArgumentException("Não é permitido cadastrar com data anterior à atual.");
 	    }
 		
 		

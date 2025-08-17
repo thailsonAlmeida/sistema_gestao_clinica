@@ -36,6 +36,7 @@ public class SecurityConfigurations {
                 .requestMatchers("/auth/me").authenticated()
                 .requestMatchers("/pacientes", "/profissionais").hasRole("MANAGER")
                 .requestMatchers("/relatorios").hasRole("PROFESSIONAL")
+                .requestMatchers("/agendamentos/**").hasAnyRole("MANAGER", "PROFESSIONAL")
                 .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex

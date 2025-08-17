@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import backend.clinica.dto.PatientDTO;
 import backend.clinica.entities.Patient;
 import backend.clinica.repositories.PatientRepository;
+import backend.clinica.repositories.UserRepository;
 import backend.clinica.services.exceptions.DataBaseException;
 import backend.clinica.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,21 +24,30 @@ public class PatientService {
 	@Autowired
 	PatientRepository patientRepository;
 	
-	@Transactional(readOnly = true)
+	@Autowired
+	UserRepository userRepository;
+	
+	@Transactional
 	public Page<PatientDTO> findAllPatientsPaged(String name, Pageable pageable) {
 		Page<Patient> listPatient = patientRepository.searchByName(name, pageable);
 		return listPatient.map(x -> new PatientDTO(x));
 	}
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public PatientDTO findByIdPatient(Long id) {
 		Optional<Patient> patientObj = patientRepository.findById(id);
 		Patient patientEntity = patientObj.orElseThrow(() -> new ResourceNotFoundException("Paciente inexistente"));
 		return new PatientDTO(patientEntity, patientEntity.getReportHistory());
 	}
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public PatientDTO registryPatient(PatientDTO patientDTO) {	
+		
+		Patient verifyEmail = patientRepository.findByEmail(patientDTO.getEmail());
+		if(verifyEmail != null) {
+			 throw new ResourceNotFoundException("O paciente com esse e-mail já existe.");
+		}
+		
 		Patient patientEntity = new Patient();
 		patientEntity = copyDtoPatient(patientEntity, patientDTO);
 		patientEntity = patientRepository.save(patientEntity);		

@@ -102,6 +102,16 @@ public class SchedulingService {
 	
 	@Transactional(readOnly = true)
 	public SchedulingDTO registryScheduling(SchedulingDTO schedulingDTO) {
+		Long professionalId = schedulingDTO.getProfessional().getId();
+	    LocalDateTime dateHour = schedulingDTO.getDateHour();
+
+	    // Verifica se já existe agendamento nesse horário para o profissional
+	    boolean isBusy = schedulingRepository.existsByProfessionalIdAndDateHour(professionalId, dateHour);
+	    if (isBusy) {
+	        throw new DataBaseException("O profissional já possui um agendamento nesse horário.");
+	    }
+		
+		
 		Scheduling schedulingEntity = new Scheduling();
 		Patient patientEntity = new Patient();		
 		Professional professionalEntity = new Professional();

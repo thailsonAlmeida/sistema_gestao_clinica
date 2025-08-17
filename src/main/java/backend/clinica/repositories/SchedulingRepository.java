@@ -18,5 +18,7 @@ public interface SchedulingRepository extends JpaRepository<Scheduling, Long> {
             + "(:startDate IS NULL OR s.dateHour >= :startDate) AND "
             + "(:endDate IS NULL OR s.dateHour <= :endDate)")
     Page<Scheduling> findByDateRange(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	
+	boolean existsByProfessionalIdAndDateHour(Long professionalId, LocalDateTime dateHour);
 
 }

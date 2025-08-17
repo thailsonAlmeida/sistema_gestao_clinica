@@ -1,4 +1,4 @@
-/*package backend.clinica.configs;
+package backend.clinica.configs;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -74,6 +74,6 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
     
     
-}*/
+}
 
 
